@@ -31,6 +31,7 @@ export const useEditor = () => {
       const initialWorkspace = new fabric.Rect({
         width: 900,
         height: 1200,
+        name: "clip",
         fill: "white",
         selectable: false,
         hasControls: false,
@@ -38,12 +39,7 @@ export const useEditor = () => {
           color: "rgba(0,0,0,0.8)",
           blur: 5,
         }),
-        name: "clip",
       });
-
-      // Add custom property
-      // (initialWorkspace as any).name = "clip";
-      // initialWorkspace["name"] = "clip";
 
       initialCanvas.setDimensions({
         width: initialContainer.offsetWidth,
