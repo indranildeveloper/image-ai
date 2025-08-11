@@ -21,6 +21,12 @@ const Editor: FC = () => {
     });
 
     init({ initialCanvas: canvas, initialContainer: containerRef.current! });
+
+    return () => {
+      canvas.dispose().catch((error) => {
+        console.log("Canvas Error: ", error);
+      });
+    };
   }, [init]);
 
   return (
