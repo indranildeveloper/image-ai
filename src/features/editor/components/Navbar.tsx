@@ -20,8 +20,10 @@ import {
 } from "lucide-react";
 import Logo from "./Logo";
 import Hint from "@/components/shared/Hint";
+import { NavbarProps } from "@/interfaces/NavbarProps";
+import { cn } from "@/lib/utils";
 
-const Navbar: FC = () => {
+const Navbar: FC<NavbarProps> = ({ activeTool, onChangeActiveTool }) => {
   return (
     <nav className="flex h-[68px] w-full items-center gap-x-8 border-b p-4 lg:pl-[34px]">
       <Logo />
@@ -49,7 +51,12 @@ const Navbar: FC = () => {
         </DropdownMenu>
         <Separator orientation="vertical" className="mx-2" />
         <Hint label="Select" side="bottom">
-          <Button variant="ghost" size="icon" className="" onClick={() => {}}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn(activeTool === "select" && "bg-slate-100")}
+            onClick={() => onChangeActiveTool("select")}
+          >
             <MousePointerClickIcon className="size-4" />
           </Button>
         </Hint>
