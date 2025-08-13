@@ -15,7 +15,7 @@ const Editor: FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { init } = useEditor();
+  const { init, editor } = useEditor();
 
   const handleChangeActiveTool = useCallback(
     (tool: ActiveTool) => {
@@ -63,6 +63,7 @@ const Editor: FC = () => {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <ShapeSidebar
+          editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}
         />

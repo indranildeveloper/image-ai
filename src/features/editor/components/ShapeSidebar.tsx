@@ -10,6 +10,7 @@ import { FaDiamond } from "react-icons/fa6";
 import { ShapeSidebarProps } from "@/interfaces/ShapeSidebarProps";
 
 const ShapeSidebar: FC<ShapeSidebarProps> = ({
+  editor,
   activeTool,
   onChangeActiveTool,
 }) => {
@@ -31,16 +32,27 @@ const ShapeSidebar: FC<ShapeSidebarProps> = ({
 
       <ScrollArea>
         <div className="grid grid-cols-3 gap-4 p-4">
-          <ShapeTool onClick={() => {}} icon={FaCircle} />
-          <ShapeTool onClick={() => {}} icon={FaSquare} />
-          <ShapeTool onClick={() => {}} icon={FaSquareFull} />
-          <ShapeTool onClick={() => {}} icon={IoTriangle} />
+          <ShapeTool onClick={() => editor?.addCircle()} icon={FaCircle} />
           <ShapeTool
-            onClick={() => {}}
+            onClick={() => editor?.addSoftRectangle()}
+            icon={FaSquare}
+          />
+          <ShapeTool
+            onClick={() => editor?.addRectangle()}
+            icon={FaSquareFull}
+          />
+          <ShapeTool
+            onClick={() => {
+              editor?.addTriangle();
+            }}
+            icon={IoTriangle}
+          />
+          <ShapeTool
+            onClick={() => editor?.addInverseTriangle()}
             icon={IoTriangle}
             iconsClassName="rotate-180"
           />
-          <ShapeTool onClick={() => {}} icon={FaDiamond} />
+          <ShapeTool onClick={() => editor?.addDiamond()} icon={FaDiamond} />
         </div>
       </ScrollArea>
 
