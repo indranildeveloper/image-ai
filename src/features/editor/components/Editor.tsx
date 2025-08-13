@@ -10,6 +10,7 @@ import Footer from "./Footer";
 import ShapeSidebar from "./ShapeSidebar";
 import FillColorSidebar from "./FillColorSidebar";
 import StrokeColorSidebar from "./StrokeColorSidebar";
+import StrokeWidthSidebar from "./StrokeWidthSidebar";
 import { SELECTION_DEPENDENT_TOOLS } from "../constants/editorConstants";
 import { ActiveTool } from "@/types/types";
 
@@ -84,6 +85,11 @@ const Editor: FC = () => {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <StrokeColorSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <StrokeWidthSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}
