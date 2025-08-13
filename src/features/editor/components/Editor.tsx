@@ -8,15 +8,39 @@ import Sidebar from "./Sidebar";
 import Toolbar from "./Toolbar";
 import Footer from "./Footer";
 import ShapeSidebar from "./ShapeSidebar";
-import { ActiveTool } from "@/types/types";
 import FillColorSidebar from "./FillColorSidebar";
+import { SELECTION_DEPENDENT_TOOLS } from "../constants/editorConstants";
+import { ActiveTool } from "@/types/types";
 
 const Editor: FC = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { init, editor } = useEditor();
+  const handleClearSelection = useCallback(() => {
+    if (SELECTION_DEPENDENT_TOOLS.includes(activeTool)) {
+      setActiveTool("select");
+    }
+  }, [activeTool]);
+
+  const { init, editor } = useEditor({
+    clearSelectionCallback: handleClearSelection,
+  });
+
+  useEffect(() => {
+    const canvas = new fabric.Canvas(canvasRef.current!, {
+      controlsAboveOverlay: true,
+      preserveObjectStacking: true,
+    });
+
+    init({ initialCanvas: canvas, initialContainer: containerRef.current! });
+
+    return () => {
+      canvas.dispose().catch((error) => {
+        console.log("Canvas Error: ", error);
+      });
+    };
+  }, [init]);
 
   const handleChangeActiveTool = useCallback(
     (tool: ActiveTool) => {
@@ -36,21 +60,6 @@ const Editor: FC = () => {
     },
     [activeTool],
   );
-
-  useEffect(() => {
-    const canvas = new fabric.Canvas(canvasRef.current!, {
-      controlsAboveOverlay: true,
-      preserveObjectStacking: true,
-    });
-
-    init({ initialCanvas: canvas, initialContainer: containerRef.current! });
-
-    return () => {
-      canvas.dispose().catch((error) => {
-        console.log("Canvas Error: ", error);
-      });
-    };
-  }, [init]);
 
   return (
     <div className="flex h-screen flex-col">

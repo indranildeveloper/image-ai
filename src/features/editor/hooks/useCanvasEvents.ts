@@ -5,6 +5,7 @@ import { FabricObject, TEvent, TPointerEvent } from "fabric";
 export const useCanvasEvents = ({
   canvas,
   setSelectedObjects,
+  clearSelectionCallback,
 }: UseCanvasEventsProps) => {
   useEffect(() => {
     const handleSelectionCreated = (
@@ -25,6 +26,7 @@ export const useCanvasEvents = ({
 
     const handleSelectionCleared = () => {
       setSelectedObjects([]);
+      clearSelectionCallback?.();
     };
 
     if (canvas) {
@@ -40,5 +42,5 @@ export const useCanvasEvents = ({
         canvas.off("selection:cleared", handleSelectionCleared);
       }
     };
-  }, [canvas, setSelectedObjects]);
+  }, [canvas, setSelectedObjects, clearSelectionCallback]);
 };

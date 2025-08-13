@@ -12,7 +12,7 @@ const FillColorSidebar: FC<FillColorSidebarProps> = ({
   activeTool,
   onChangeActiveTool,
 }) => {
-  const colorValue = editor?.fillColor ?? FILL_COLOR;
+  const colorValue = editor?.getActiveFillColor() ?? FILL_COLOR;
 
   const handleCloseToolSidebar = () => {
     onChangeActiveTool("select");

@@ -2,6 +2,16 @@ export const FILL_COLOR = "rgba(0, 0, 0, 1)";
 export const STROKE_COLOR = "rgba(0, 0, 0, 1)";
 export const STROKE_WIDTH = 2;
 
+export const SELECTION_DEPENDENT_TOOLS = [
+  "fill",
+  "fonts",
+  "filter",
+  "opacity",
+  "remove-bg",
+  "stroke-color",
+  "stroke-width",
+];
+
 export const CIRCLE_OPTIONS = {
   radius: 200,
   left: 100,

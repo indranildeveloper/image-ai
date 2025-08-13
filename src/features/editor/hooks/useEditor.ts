@@ -14,6 +14,7 @@ import {
 import { Editor } from "@/interfaces/Editor";
 import { useCanvasEvents } from "./useCanvasEvents";
 import { isTextType } from "../utils/utils";
+import { UseEditorProps } from "@/interfaces/UseEditorProps";
 
 const buildEditor = ({
   canvas,
@@ -182,15 +183,26 @@ const buildEditor = ({
 
       addToCanvas(object);
     },
+    getActiveFillColor: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return fillColor;
+      }
+
+      const value = selectedObject.get("fill") || fillColor;
+      // Currently, Gradients and patterns are not supported
+      return value as string;
+    },
+
     canvas,
-    fillColor,
     strokeColor,
     strokeWidth,
     selectedObjects,
   };
 };
 
-export const useEditor = () => {
+export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [selectedObjects, setSelectedObjects] = useState<fabric.FabricObject[]>(
@@ -202,7 +214,7 @@ export const useEditor = () => {
 
   useAutoResize({ canvas, container });
 
-  useCanvasEvents({ canvas, setSelectedObjects });
+  useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
 
   const editor = useMemo(() => {
     if (canvas) {
