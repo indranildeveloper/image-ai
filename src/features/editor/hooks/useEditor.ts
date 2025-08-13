@@ -67,7 +67,7 @@ const buildEditor = ({
           object.set({ fillColor: value });
           return;
         }
-        object.set({ strokeColor: value });
+        object.set({ stroke: value });
       });
 
       canvas.renderAll();
@@ -194,9 +194,19 @@ const buildEditor = ({
       // Currently, Gradients and patterns are not supported
       return value as string;
     },
+    getActiveStrokeColor: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return fillColor;
+      }
+
+      const value = selectedObject.get("stroke") || strokeColor;
+      // Currently, Gradients and patterns are not supported
+      return value as string;
+    },
 
     canvas,
-    strokeColor,
     strokeWidth,
     selectedObjects,
   };
