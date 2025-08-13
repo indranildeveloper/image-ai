@@ -1,0 +1,44 @@
+import { useEffect } from "react";
+import { UseCanvasEventsProps } from "@/interfaces/UseCanvasEventsProps";
+import { FabricObject, TEvent, TPointerEvent } from "fabric";
+
+export const useCanvasEvents = ({
+  canvas,
+  setSelectedObjects,
+}: UseCanvasEventsProps) => {
+  useEffect(() => {
+    const handleSelectionCreated = (
+      event: Partial<TEvent<TPointerEvent>> & {
+        selected: FabricObject[];
+      },
+    ) => {
+      setSelectedObjects(event.selected);
+    };
+
+    const handleSelectionUpdated = (
+      event: Partial<TEvent<TPointerEvent>> & {
+        selected: FabricObject[];
+      },
+    ) => {
+      setSelectedObjects(event.selected);
+    };
+
+    const handleSelectionCleared = () => {
+      setSelectedObjects([]);
+    };
+
+    if (canvas) {
+      canvas.on("selection:created", handleSelectionCreated);
+      canvas.on("selection:updated", handleSelectionUpdated);
+      canvas.on("selection:cleared", handleSelectionCleared);
+    }
+
+    return () => {
+      if (canvas) {
+        canvas.off("selection:created", handleSelectionCreated);
+        canvas.off("selection:updated", handleSelectionUpdated);
+        canvas.off("selection:cleared", handleSelectionCleared);
+      }
+    };
+  }, [canvas, setSelectedObjects]);
+};
