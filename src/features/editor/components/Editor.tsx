@@ -7,6 +7,7 @@ import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Toolbar from "./Toolbar";
 import Footer from "./Footer";
+import ShapeSidebar from "./ShapeSidebar";
 import { ActiveTool } from "@/types/types";
 
 const Editor: FC = () => {
@@ -58,6 +59,10 @@ const Editor: FC = () => {
       />
       <div className="absolute top-[68px] flex h-[calc(100%-68px)] w-full">
         <Sidebar
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <ShapeSidebar
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}
         />
