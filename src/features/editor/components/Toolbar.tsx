@@ -1,16 +1,24 @@
 "use client";
 
 import { FC, useState } from "react";
-import { ToolbarProps } from "@/interfaces/ToolbarProps";
+import { ITextboxOptions } from "fabric/fabric-impl";
 import Hint from "@/components/shared/Hint";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { BsBorderWidth } from "react-icons/bs";
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
 import { RxTransparencyGrid } from "react-icons/rx";
-import { ArrowDownIcon, ArrowUpIcon, ChevronDownIcon } from "lucide-react";
+import {
+  AlignCenterIcon,
+  AlignLeftIcon,
+  AlignRightIcon,
+  ArrowDownIcon,
+  ArrowUpIcon,
+  ChevronDownIcon,
+} from "lucide-react";
 import { isTextType } from "../utils/utils";
-import { FONT_WEIGHT } from "../constants/editorConstants";
+import { FONT_WEIGHT, TEXT_ALIGN } from "../constants/editorConstants";
+import { ToolbarProps } from "@/interfaces/ToolbarProps";
 
 const Toolbar: FC<ToolbarProps> = ({
   editor,
@@ -27,6 +35,7 @@ const Toolbar: FC<ToolbarProps> = ({
   const initialFontStyle = editor?.getActiveFontStyle();
   const initialFontLineThrough = editor?.getActiveFontLineThrough();
   const initialFontUnderline = editor?.getActiveFontUnderline();
+  const initialTextAlign = editor?.getActiveTextAlign() ?? TEXT_ALIGN;
 
   const [properties, setProperties] = useState({
     fillColor: initialFillColor,
@@ -36,6 +45,7 @@ const Toolbar: FC<ToolbarProps> = ({
     fontStyle: initialFontStyle,
     fontLineThrough: initialFontLineThrough,
     fontUnderline: initialFontUnderline,
+    textAlign: initialTextAlign,
   });
 
   if (editor?.selectedObjects.length === 0) {
@@ -90,6 +100,16 @@ const Toolbar: FC<ToolbarProps> = ({
     setProperties((prevProperties) => ({
       ...prevProperties,
       fontUnderline: newValue,
+    }));
+  };
+
+  const handleChangeTextAlign = (value: ITextboxOptions["textAlign"]) => {
+    if (!selectedObject) return;
+
+    editor?.changeTextAlign(value);
+    setProperties((prevProperties) => ({
+      ...prevProperties,
+      textAlign: value as string,
     }));
   };
 
@@ -215,6 +235,50 @@ const Toolbar: FC<ToolbarProps> = ({
               className={cn(properties.fontLineThrough && "bg-slate-100")}
             >
               <FaStrikethrough className="size-4" />
+            </Button>
+          </Hint>
+        </div>
+      )}
+      {isTextSelected && (
+        <div className="flex h-full items-center justify-center">
+          <Hint label="Align Left" side="bottom">
+            <Button
+              onClick={() => handleChangeTextAlign("left")}
+              size="icon"
+              variant="ghost"
+              className={cn(properties.textAlign === "left" && "bg-slate-100")}
+            >
+              <AlignLeftIcon className="size-4" />
+            </Button>
+          </Hint>
+        </div>
+      )}
+      {isTextSelected && (
+        <div className="flex h-full items-center justify-center">
+          <Hint label="Align Center" side="bottom">
+            <Button
+              onClick={() => handleChangeTextAlign("center")}
+              size="icon"
+              variant="ghost"
+              className={cn(
+                properties.textAlign === "center" && "bg-slate-100",
+              )}
+            >
+              <AlignCenterIcon className="size-4" />
+            </Button>
+          </Hint>
+        </div>
+      )}
+      {isTextSelected && (
+        <div className="flex h-full items-center justify-center">
+          <Hint label="Align Right" side="bottom">
+            <Button
+              onClick={() => handleChangeTextAlign("right")}
+              size="icon"
+              variant="ghost"
+              className={cn(properties.textAlign === "right" && "bg-slate-100")}
+            >
+              <AlignRightIcon className="size-4" />
             </Button>
           </Hint>
         </div>

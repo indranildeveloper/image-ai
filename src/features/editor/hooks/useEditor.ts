@@ -16,6 +16,7 @@ import {
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
   STROKE_WIDTH,
+  TEXT_ALIGN,
   TEXT_OPTIONS,
   TRIANGLE_OPTIONS,
 } from "../constants/editorConstants";
@@ -107,6 +108,14 @@ const buildEditor = ({
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
           object.set({ underline: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeTextAlign: (value: ITextboxOptions["textAlign"]) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ textAlign: value });
         }
       });
       canvas.renderAll();
@@ -324,7 +333,6 @@ const buildEditor = ({
       }
 
       const value = selectedObject.get("strokeWidth") || strokeWidth;
-      // Currently, Gradients and patterns are not supported
       return value as number;
     },
     getActiveStrokeDashArray: () => {
@@ -335,7 +343,6 @@ const buildEditor = ({
       }
 
       const value = selectedObject.get("strokeDashArray") || strokeDashArray;
-      // Currently, Gradients and patterns are not supported
       return value as number[];
     },
     getActiveFontFamily: () => {
@@ -346,7 +353,6 @@ const buildEditor = ({
       }
 
       const value = selectedObject.get("fontFamily") || fontFamily;
-      // Currently, Gradients and patterns are not supported
       return value as string;
     },
     getActiveFontWeight: () => {
@@ -357,7 +363,6 @@ const buildEditor = ({
       }
 
       const value = selectedObject.get("fontWeight") || FONT_WEIGHT;
-      // Currently, Gradients and patterns are not supported
       return value as number;
     },
     getActiveFontStyle: () => {
@@ -368,7 +373,6 @@ const buildEditor = ({
       }
 
       const value = selectedObject.get("fontStyle") || FONT_STYLE;
-      // Currently, Gradients and patterns are not supported
       return value as string;
     },
     getActiveFontLineThrough: () => {
@@ -379,7 +383,6 @@ const buildEditor = ({
       }
 
       const value = selectedObject.get("linethrough") || FONT_LINE_THROUGH;
-      // Currently, Gradients and patterns are not supported
       return value as boolean;
     },
     getActiveFontUnderline: () => {
@@ -390,8 +393,17 @@ const buildEditor = ({
       }
 
       const value = selectedObject.get("underline") || FONT_UNDERLINE;
-      // Currently, Gradients and patterns are not supported
       return value as boolean;
+    },
+    getActiveTextAlign: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return TEXT_ALIGN;
+      }
+
+      const value = selectedObject.get("textAlign") || TEXT_ALIGN;
+      return value as ITextboxOptions["textAlign"];
     },
 
     canvas,

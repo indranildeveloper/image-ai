@@ -8,6 +8,7 @@ export const FONT_WEIGHT = 400;
 export const FONT_STYLE = "normal";
 export const FONT_LINE_THROUGH = false;
 export const FONT_UNDERLINE = false;
+export const TEXT_ALIGN = "left";
 
 export const SELECTION_DEPENDENT_TOOLS = [
   "fill",
