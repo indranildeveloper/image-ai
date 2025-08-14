@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ToolSidebarHeader from "./ToolSidebarHeader";
 import ToolSidebarClose from "./ToolSidebarClose";
+import { UploadButton } from "@/utils/uploadthing";
 import { AlertTriangleIcon, LoaderIcon } from "lucide-react";
 import { useGetImages } from "@/features/images/api/useGetImages";
 import { ImageSidebarProps } from "@/interfaces/ImageSidebarProps";
@@ -31,6 +32,22 @@ const ImageSidebar: FC<ImageSidebarProps> = ({
         title="Images"
         description="Add Images to your canvas."
       />
+
+      <div className="border-b p-4">
+        <UploadButton
+          appearance={{
+            button: "w-full text-sm font-md",
+            allowedContent: "hidden",
+          }}
+          content={{
+            button: "Upload Image",
+          }}
+          endpoint="imageUploader"
+          onClientUploadComplete={(response) => {
+            editor?.addImage(response[0].ufsUrl);
+          }}
+        />
+      </div>
 
       {isLoading && (
         <div className="mt-10 flex flex-1 items-center justify-center">
