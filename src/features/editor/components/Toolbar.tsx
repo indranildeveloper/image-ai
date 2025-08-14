@@ -17,8 +17,13 @@ import {
   ChevronDownIcon,
 } from "lucide-react";
 import { isTextType } from "../utils/utils";
-import { FONT_WEIGHT, TEXT_ALIGN } from "../constants/editorConstants";
+import {
+  FONT_SIZE,
+  FONT_WEIGHT,
+  TEXT_ALIGN,
+} from "../constants/editorConstants";
 import { ToolbarProps } from "@/interfaces/ToolbarProps";
+import FontSizeInput from "./FontSizeInput";
 
 const Toolbar: FC<ToolbarProps> = ({
   editor,
@@ -36,6 +41,7 @@ const Toolbar: FC<ToolbarProps> = ({
   const initialFontLineThrough = editor?.getActiveFontLineThrough();
   const initialFontUnderline = editor?.getActiveFontUnderline();
   const initialTextAlign = editor?.getActiveTextAlign() ?? TEXT_ALIGN;
+  const initialFontSize = editor?.getActiveFontSize() ?? FONT_SIZE;
 
   const [properties, setProperties] = useState({
     fillColor: initialFillColor,
@@ -46,6 +52,7 @@ const Toolbar: FC<ToolbarProps> = ({
     fontLineThrough: initialFontLineThrough,
     fontUnderline: initialFontUnderline,
     textAlign: initialTextAlign,
+    fontSize: initialFontSize,
   });
 
   if (editor?.selectedObjects.length === 0) {
@@ -110,6 +117,15 @@ const Toolbar: FC<ToolbarProps> = ({
     setProperties((prevProperties) => ({
       ...prevProperties,
       textAlign: value as string,
+    }));
+  };
+
+  const handleChangeFontSize = (value: number) => {
+    if (!selectedObject) return;
+    editor.changeFontSize(value);
+    setProperties((prevProperties) => ({
+      ...prevProperties,
+      fontSize: value,
     }));
   };
 
@@ -281,6 +297,14 @@ const Toolbar: FC<ToolbarProps> = ({
               <AlignRightIcon className="size-4" />
             </Button>
           </Hint>
+        </div>
+      )}
+      {isTextSelected && (
+        <div className="flex h-full items-center justify-center">
+          <FontSizeInput
+            value={properties.fontSize}
+            onChange={handleChangeFontSize}
+          />
         </div>
       )}
       <div className="flex h-full items-center justify-center">

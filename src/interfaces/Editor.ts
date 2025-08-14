@@ -17,6 +17,7 @@ export interface Editor {
   changeFontLineThrough: (value: boolean) => void;
   changeFontUnderline: (value: boolean) => void;
   changeTextAlign: (value: ITextboxOptions["textAlign"]) => void;
+  changeFontSize: (value: number) => void;
   addCircle: () => void;
   addSoftRectangle: () => void;
   addRectangle: () => void;
@@ -33,6 +34,7 @@ export interface Editor {
   getActiveFontLineThrough: () => boolean;
   getActiveFontUnderline: () => boolean;
   getActiveTextAlign: () => ITextboxOptions["textAlign"];
+  getActiveFontSize: () => number;
   selectedObjects: fabric.FabricObject[];
   canvas: fabric.Canvas;
 }

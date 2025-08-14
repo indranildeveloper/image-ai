@@ -9,6 +9,7 @@ import {
   FILL_COLOR,
   FONT_FAMILY,
   FONT_LINE_THROUGH,
+  FONT_SIZE,
   FONT_STYLE,
   FONT_UNDERLINE,
   FONT_WEIGHT,
@@ -116,6 +117,14 @@ const buildEditor = ({
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
           object.set({ textAlign: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeFontSize: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ fontSize: value });
         }
       });
       canvas.renderAll();
@@ -404,6 +413,16 @@ const buildEditor = ({
 
       const value = selectedObject.get("textAlign") || TEXT_ALIGN;
       return value as ITextboxOptions["textAlign"];
+    },
+    getActiveFontSize: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return FONT_SIZE;
+      }
+
+      const value = selectedObject.get("fontSize") || FONT_SIZE;
+      return value as number;
     },
 
     canvas,
