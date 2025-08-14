@@ -12,6 +12,10 @@ export interface Editor {
   changeStrokeWidth: (value: number) => void;
   changeStrokeDashArray: (value: number[]) => void;
   changeFontFamily: (value: string) => void;
+  changeFontWeight: (value: number) => void;
+  changeFontStyle: (value: string) => void;
+  changeFontLineThrough: (value: boolean) => void;
+  changeFontUnderline: (value: boolean) => void;
   addCircle: () => void;
   addSoftRectangle: () => void;
   addRectangle: () => void;
@@ -23,6 +27,10 @@ export interface Editor {
   getActiveStrokeWidth: () => number;
   getActiveStrokeDashArray: () => number[];
   getActiveFontFamily: () => string;
+  getActiveFontWeight: () => number;
+  getActiveFontStyle: () => string;
+  getActiveFontLineThrough: () => boolean;
+  getActiveFontUnderline: () => boolean;
   selectedObjects: fabric.FabricObject[];
   canvas: fabric.Canvas;
 }
