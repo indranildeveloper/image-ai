@@ -7,6 +7,7 @@ import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
   FILL_COLOR,
+  FONT_FAMILY,
   RECTANGLE_OPTIONS,
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
@@ -30,6 +31,8 @@ const buildEditor = ({
   selectedObjects,
   strokeDashArray,
   setStrokeDashArray,
+  fontFamily,
+  setFontFamily,
 }: BuildEditorProps): Editor => {
   const getWorkSpace = () => {
     return (
@@ -100,6 +103,16 @@ const buildEditor = ({
         const workspace = getWorkSpace();
         canvas.sendObjectToBack(workspace!);
       });
+    },
+    changeFontFamily: (value: string) => {
+      setFontFamily(value);
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ fontFamily: value });
+        }
+      });
+
+      canvas.renderAll();
     },
     changeFillColor: (value: string) => {
       setFillColor(value);
@@ -289,6 +302,17 @@ const buildEditor = ({
       // Currently, Gradients and patterns are not supported
       return value as number[];
     },
+    getActiveFontFamily: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return fontFamily;
+      }
+
+      const value = selectedObject.get("fontFamily") || fontFamily;
+      // Currently, Gradients and patterns are not supported
+      return value as string;
+    },
 
     canvas,
     selectedObjects,
@@ -306,6 +330,7 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
   const [strokeWidth, setStrokeWidth] = useState<number>(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
+  const [fontFamily, setFontFamily] = useState<string>(FONT_FAMILY);
 
   useAutoResize({ canvas, container });
 
@@ -324,6 +349,8 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
         selectedObjects,
         strokeDashArray,
         setStrokeDashArray,
+        fontFamily,
+        setFontFamily,
       });
     }
 
@@ -335,6 +362,7 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     strokeWidth,
     selectedObjects,
     strokeDashArray,
+    fontFamily,
   ]);
 
   const init = useCallback(

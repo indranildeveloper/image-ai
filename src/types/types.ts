@@ -24,6 +24,8 @@ export type BuildEditorProps = {
   strokeWidth: number;
   selectedObjects: fabric.FabricObject[];
   strokeDashArray: number[];
+  fontFamily: string;
+  setFontFamily: (value: string) => void;
   setStrokeDashArray: (value: number[]) => void;
   setFillColor: (value: string) => void;
   setStrokeColor: (value: string) => void;

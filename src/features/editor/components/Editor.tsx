@@ -13,6 +13,7 @@ import StrokeColorSidebar from "./StrokeColorSidebar";
 import StrokeWidthSidebar from "./StrokeWidthSidebar";
 import OpacitySidebar from "./OpacitySidebar";
 import TextSidebar from "./TextSidebar";
+import FontSidebar from "./FontSidebar";
 import { SELECTION_DEPENDENT_TOOLS } from "../constants/editorConstants";
 import { ActiveTool } from "@/types/types";
 
@@ -102,6 +103,11 @@ const Editor: FC = () => {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <TextSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <FontSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}

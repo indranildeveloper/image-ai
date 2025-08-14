@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 import ToolSidebarHeader from "./ToolSidebarHeader";
 import ToolSidebarClose from "./ToolSidebarClose";
 import { TextSidebarProps } from "@/interfaces/TextSidebarProps";
-import { Button } from "@/components/ui/button";
 
 const TextSidebar: FC<TextSidebarProps> = ({
   editor,
