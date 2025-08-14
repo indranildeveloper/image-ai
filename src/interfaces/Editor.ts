@@ -1,6 +1,8 @@
 import * as fabric from "fabric";
 
 export interface Editor {
+  changeOpacity: (value: number) => void;
+  getActiveOpacity: () => number;
   bringForward: () => void;
   sendBackward: () => void;
   changeFillColor: (value: string) => void;

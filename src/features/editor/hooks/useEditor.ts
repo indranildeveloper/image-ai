@@ -54,6 +54,23 @@ const buildEditor = ({
   };
 
   return {
+    changeOpacity: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ opacity: value });
+      });
+      canvas.renderAll();
+    },
+    getActiveOpacity: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return 1;
+      }
+
+      const value = selectedObject.get("opacity") || 1;
+      // Currently, Gradients and patterns are not supported
+      return value as number;
+    },
     bringForward: () => {
       canvas.getActiveObjects().forEach((object) => {
         canvas.bringObjectForward(object);
