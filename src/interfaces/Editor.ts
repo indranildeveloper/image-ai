@@ -2,6 +2,7 @@ import * as fabric from "fabric";
 import { ITextboxOptions } from "fabric/fabric-impl";
 
 export interface Editor {
+  deleteObject: () => void;
   addText: (value: string, options?: ITextboxOptions) => void;
   changeOpacity: (value: number) => void;
   getActiveOpacity: () => number;

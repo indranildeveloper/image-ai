@@ -15,6 +15,7 @@ import {
   ArrowDownIcon,
   ArrowUpIcon,
   ChevronDownIcon,
+  TrashIcon,
 } from "lucide-react";
 import { isTextType } from "../utils/utils";
 import {
@@ -22,8 +23,8 @@ import {
   FONT_WEIGHT,
   TEXT_ALIGN,
 } from "../constants/editorConstants";
-import { ToolbarProps } from "@/interfaces/ToolbarProps";
 import FontSizeInput from "./FontSizeInput";
+import { ToolbarProps } from "@/interfaces/ToolbarProps";
 
 const Toolbar: FC<ToolbarProps> = ({
   editor,
@@ -338,6 +339,17 @@ const Toolbar: FC<ToolbarProps> = ({
             className={cn(activeTool === "opacity" && "bg-slate-100")}
           >
             <RxTransparencyGrid className="size-4" />
+          </Button>
+        </Hint>
+      </div>
+      <div className="flex h-full items-center justify-center">
+        <Hint label="Delete" side="bottom">
+          <Button
+            onClick={() => editor?.deleteObject()}
+            size="icon"
+            variant="ghost"
+          >
+            <TrashIcon className="size-4" />
           </Button>
         </Hint>
       </div>
