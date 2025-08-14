@@ -65,6 +65,14 @@ const buildEditor = ({
   };
 
   return {
+    addImage: (value: string) => {
+      const newImage = new Image();
+      newImage.onload = function () {
+        const imageToAddToCanvas = new fabric.FabricImage(newImage, {});
+        addToCanvas(imageToAddToCanvas);
+      };
+      newImage.src = value;
+    },
     deleteObject: () => {
       canvas.getActiveObjects().forEach((object) => {
         canvas.remove(object);
