@@ -1530,6 +1530,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:5.85.3":
+  version: 5.85.3
+  resolution: "@tanstack/query-core@npm:5.85.3"
+  checksum: 10c0/7db9e78c3648a3d5bc295fff14e7afdf061e38ca55b0004e3f6e6f1f44596f564bf8b59c97b2d1f7ce851792c8eac7008608ccd4de0dfcd6349a4e0943b7d247
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.85.3":
+  version: 5.85.3
+  resolution: "@tanstack/react-query@npm:5.85.3"
+  dependencies:
+    "@tanstack/query-core": "npm:5.85.3"
+  peerDependencies:
+    react: ^18 || ^19
+  checksum: 10c0/3588a6997c5f5302d999f98230894ad3ed5d24b0b063b62c34300e2cd3a715afc7edd97eb8a99408f2f7f85e76812fa87d035dbbc340c95adecade80d1e44ae0
+  languageName: node
+  linkType: hard
+
 "@tootallnate/once@npm:2":
   version: 2.0.0
   resolution: "@tootallnate/once@npm:2.0.0"
@@ -3873,6 +3891,7 @@ __metadata:
     "@radix-ui/react-slot": "npm:^1.2.3"
     "@radix-ui/react-tooltip": "npm:^1.2.7"
     "@tailwindcss/postcss": "npm:^4"
+    "@tanstack/react-query": "npm:^5.85.3"
     "@types/fabric": "npm:^5.3.10"
     "@types/material-colors": "npm:^1.2.3"
     "@types/node": "npm:^20"

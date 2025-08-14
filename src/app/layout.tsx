@@ -1,6 +1,7 @@
 import { FC } from "react";
 import type { Metadata } from "next";
 import { Inter, Fira_Code } from "next/font/google";
+import Providers from "@/components/providers/Providers";
 import { RootLayoutProps } from "@/interfaces/RootLayoutProps";
 
 import "@/styles/globals.css";
@@ -26,7 +27,7 @@ const RootLayout: FC<Readonly<RootLayoutProps>> = ({ children }) => {
       <body
         className={`${interSans.variable} ${firaCode.variable} antialiased`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
