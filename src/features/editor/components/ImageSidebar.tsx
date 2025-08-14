@@ -1,4 +1,6 @@
 import { FC } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ToolSidebarHeader from "./ToolSidebarHeader";
@@ -46,7 +48,33 @@ const ImageSidebar: FC<ImageSidebarProps> = ({
       )}
 
       <ScrollArea className="h-[calc(100vh-140px)]">
-        <div className="space-y-2 p-4"></div>
+        <div className="p-4">
+          <div className="grid grid-cols-2 gap-4">
+            {images &&
+              images.map((image) => {
+                return (
+                  <button
+                    key={image.id}
+                    className="group bg-muted relative h-[100px] w-full overflow-hidden rounded-sm border transition hover:opacity-75"
+                  >
+                    <Image
+                      src={image.urls.small}
+                      alt={image.alt_description ?? "Image"}
+                      fill
+                      className="object-cover"
+                    />
+                    <Link
+                      href={image.links.html}
+                      target="_blank"
+                      className="absolute bottom-0 left-0 w-full truncate bg-black/50 p-1 text-left text-[10px] text-white opacity-0 group-hover:opacity-100 hover:underline"
+                    >
+                      {image.user.name}
+                    </Link>
+                  </button>
+                );
+              })}
+          </div>
+        </div>
       </ScrollArea>
 
       <ToolSidebarClose onClick={handleCloseToolSidebar} />
