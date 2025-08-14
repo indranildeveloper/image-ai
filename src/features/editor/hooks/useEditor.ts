@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import * as fabric from "fabric";
+import { ITextboxOptions } from "fabric/fabric-impl";
 import { useAutoResize } from "./useAutoResize";
 import { BuildEditorProps } from "@/types/types";
 import {
@@ -10,6 +11,7 @@ import {
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
   STROKE_WIDTH,
+  TEXT_OPTIONS,
   TRIANGLE_OPTIONS,
 } from "../constants/editorConstants";
 import { useCanvasEvents } from "./useCanvasEvents";
@@ -54,6 +56,16 @@ const buildEditor = ({
   };
 
   return {
+    addText: (value: string, options?: ITextboxOptions) => {
+      const object = new fabric.Textbox(value, {
+        ...TEXT_OPTIONS,
+        // @ts-expect-error fillColor is string
+        fill: fillColor,
+        ...options,
+      });
+
+      addToCanvas(object);
+    },
     changeOpacity: (value: number) => {
       canvas.getActiveObjects().forEach((object) => {
         object.set({ opacity: value });
