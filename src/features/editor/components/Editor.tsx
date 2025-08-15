@@ -16,6 +16,7 @@ import TextSidebar from "./TextSidebar";
 import FontSidebar from "./FontSidebar";
 import ImageSidebar from "./ImageSidebar";
 import FilterSidebar from "./FilterSidebar";
+import AISidebar from "./AISidebar";
 import { SELECTION_DEPENDENT_TOOLS } from "../constants/editorConstants";
 import { ActiveTool } from "@/types/types";
 
@@ -120,6 +121,11 @@ const Editor: FC = () => {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <FilterSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <AISidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}
