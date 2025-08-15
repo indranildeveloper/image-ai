@@ -40,6 +40,8 @@ export interface Editor {
   getActiveFontSize: () => number;
   copyObject: () => void;
   pasteObject: () => void;
+  enableDrawingMode: () => void;
+  disableDrawingMode: () => void;
   selectedObjects: fabric.FabricObject[];
   canvas: fabric.Canvas;
 }

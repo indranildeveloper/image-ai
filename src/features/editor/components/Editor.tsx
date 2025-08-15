@@ -18,6 +18,7 @@ import ImageSidebar from "./ImageSidebar";
 import FilterSidebar from "./FilterSidebar";
 import AISidebar from "./AISidebar";
 import RemoveBackgroundSidebar from "./RemoveBackgroundSidebar";
+import DrawSidebar from "./DrawSidebar";
 import { SELECTION_DEPENDENT_TOOLS } from "../constants/editorConstants";
 import { ActiveTool } from "@/types/types";
 
@@ -53,21 +54,21 @@ const Editor: FC = () => {
 
   const handleChangeActiveTool = useCallback(
     (tool: ActiveTool) => {
+      if (tool === "draw") {
+        editor?.enableDrawingMode();
+      }
+
+      if (activeTool === "draw") {
+        editor?.disableDrawingMode();
+      }
+
       if (tool === activeTool) {
         return setActiveTool("select");
       }
 
-      if (tool === "draw") {
-        // TODO: Enable draw mode
-      }
-
-      if (activeTool === "draw") {
-        // TODO: Disable draw mode
-      }
-
       setActiveTool(tool);
     },
-    [activeTool],
+    [activeTool, editor],
   );
 
   return (
@@ -132,6 +133,11 @@ const Editor: FC = () => {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <RemoveBackgroundSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <DrawSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}

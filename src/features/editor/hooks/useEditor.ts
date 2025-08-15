@@ -70,6 +70,18 @@ const buildEditor = ({
   return {
     copyObject: () => copy(),
     pasteObject: () => paste(),
+    enableDrawingMode: () => {
+      canvas.discardActiveObject();
+      canvas.renderAll();
+      canvas.isDrawingMode = true;
+      // TODO: fix bug for updating the brush color and width
+      canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+      canvas.freeDrawingBrush.width = strokeWidth;
+      canvas.freeDrawingBrush.color = strokeColor;
+    },
+    disableDrawingMode: () => {
+      canvas.isDrawingMode = false;
+    },
     changeImageFilter: (value: string) => {
       const objects = canvas.getActiveObjects();
       objects.forEach((object) => {
@@ -211,7 +223,8 @@ const buildEditor = ({
         }
         object.set({ stroke: value });
       });
-
+      canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+      canvas.freeDrawingBrush.color = strokeColor;
       canvas.renderAll();
     },
     changeStrokeWidth: (value: number) => {
@@ -219,6 +232,8 @@ const buildEditor = ({
       canvas.getActiveObjects().forEach((object) => {
         object.set({ strokeWidth: value });
       });
+      canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+      canvas.freeDrawingBrush.width = strokeWidth;
       canvas.renderAll();
     },
     changeStrokeDashArray: (value: number[]) => {

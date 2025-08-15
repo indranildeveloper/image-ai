@@ -5,6 +5,7 @@ import SidebarItem from "./SidebarItem";
 import {
   ImageIcon,
   LayoutTemplateIcon,
+  PencilIcon,
   SettingsIcon,
   ShapesIcon,
   SparklesIcon,
@@ -39,6 +40,12 @@ const Sidebar: FC<SidebarProps> = ({ activeTool, onChangeActiveTool }) => {
           label="Shapes"
           isActive={activeTool === "shapes"}
           onClick={() => onChangeActiveTool("shapes")}
+        />
+        <SidebarItem
+          icon={PencilIcon}
+          label="Draw"
+          isActive={activeTool === "draw"}
+          onClick={() => onChangeActiveTool("draw")}
         />
         <SidebarItem
           icon={SparklesIcon}
