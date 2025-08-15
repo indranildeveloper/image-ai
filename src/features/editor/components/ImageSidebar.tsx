@@ -73,7 +73,6 @@ const ImageSidebar: FC<ImageSidebarProps> = ({
                   <button
                     key={image.id}
                     onClick={() => {
-                      console.log("Image added", image.urls.regular);
                       editor?.addImage(image.urls.regular);
                     }}
                     className="group bg-muted relative h-[100px] w-full overflow-hidden rounded-sm border transition hover:opacity-75"

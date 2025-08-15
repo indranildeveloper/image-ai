@@ -6,6 +6,7 @@ import Hint from "@/components/shared/Hint";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { BsBorderWidth } from "react-icons/bs";
+import { TbColorFilter } from "react-icons/tb";
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
 import { RxTransparencyGrid } from "react-icons/rx";
 import {
@@ -17,7 +18,7 @@ import {
   ChevronDownIcon,
   TrashIcon,
 } from "lucide-react";
-import { isTextType } from "../utils/utils";
+import { isImageType, isTextType } from "../utils/utils";
 import {
   FONT_SIZE,
   FONT_WEIGHT,
@@ -31,10 +32,9 @@ const Toolbar: FC<ToolbarProps> = ({
   activeTool,
   onChangeActiveTool,
 }) => {
+  const selectedObjectType = editor?.selectedObjects[0]?.type;
   const initialFillColor = editor?.getActiveFillColor();
   const initialStrokeColor = editor?.getActiveStrokeColor();
-  const selectedObjectType = editor?.selectedObjects[0]?.type;
-  const isTextSelected = isTextType(selectedObjectType);
   const initialFontFamily = editor?.getActiveFontFamily();
   const initialFontWeight = editor?.getActiveFontWeight() ?? FONT_WEIGHT;
   const selectedObject = editor?.selectedObjects[0];
@@ -43,6 +43,9 @@ const Toolbar: FC<ToolbarProps> = ({
   const initialFontUnderline = editor?.getActiveFontUnderline();
   const initialTextAlign = editor?.getActiveTextAlign() ?? TEXT_ALIGN;
   const initialFontSize = editor?.getActiveFontSize() ?? FONT_SIZE;
+
+  const isTextSelected = isTextType(selectedObjectType);
+  const isImageSelected = isImageType(selectedObjectType);
 
   const [properties, setProperties] = useState({
     fillColor: initialFillColor,
@@ -132,23 +135,25 @@ const Toolbar: FC<ToolbarProps> = ({
 
   return (
     <div className="z-[49] flex h-[56px] w-full shrink-0 items-center gap-x-2 overflow-x-auto border-b bg-white p-2">
-      <div className="flex h-full items-center justify-center">
-        <Hint label="Color" side="bottom">
-          <Button
-            onClick={() => onChangeActiveTool("fill")}
-            size="icon"
-            variant="ghost"
-            className={cn(activeTool === "fill" && "bg-slate-100")}
-          >
-            <div
-              className="size-4 rounded-sm border"
-              style={{
-                backgroundColor: properties.fillColor,
-              }}
-            />
-          </Button>
-        </Hint>
-      </div>
+      {!isImageSelected && (
+        <div className="flex h-full items-center justify-center">
+          <Hint label="Color" side="bottom">
+            <Button
+              onClick={() => onChangeActiveTool("fill")}
+              size="icon"
+              variant="ghost"
+              className={cn(activeTool === "fill" && "bg-slate-100")}
+            >
+              <div
+                className="size-4 rounded-sm border"
+                style={{
+                  backgroundColor: properties.fillColor,
+                }}
+              />
+            </Button>
+          </Hint>
+        </div>
+      )}
       {!isTextSelected && (
         <div className="flex h-full items-center justify-center">
           <Hint label="Stroke Color" side="bottom">
@@ -306,6 +311,20 @@ const Toolbar: FC<ToolbarProps> = ({
             value={properties.fontSize}
             onChange={handleChangeFontSize}
           />
+        </div>
+      )}
+      {isImageSelected && (
+        <div className="flex h-full items-center justify-center">
+          <Hint label="Filters" side="bottom">
+            <Button
+              onClick={() => onChangeActiveTool("filter")}
+              size="icon"
+              variant="ghost"
+              className={cn(activeTool === "filter" && "bg-slate-100")}
+            >
+              <TbColorFilter className="size-4" />
+            </Button>
+          </Hint>
         </div>
       )}
       <div className="flex h-full items-center justify-center">

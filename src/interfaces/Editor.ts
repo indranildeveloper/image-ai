@@ -2,6 +2,7 @@ import * as fabric from "fabric";
 import { ITextboxOptions } from "fabric/fabric-impl";
 
 export interface Editor {
+  changeImageFilter: (value: string) => void;
   addImage: (value: string) => void;
   deleteObject: () => void;
   addText: (value: string, options?: ITextboxOptions) => void;

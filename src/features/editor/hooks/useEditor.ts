@@ -13,6 +13,7 @@ import {
   FONT_STYLE,
   FONT_UNDERLINE,
   FONT_WEIGHT,
+  IMAGE_FILTERS,
   RECTANGLE_OPTIONS,
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
@@ -22,7 +23,7 @@ import {
   TRIANGLE_OPTIONS,
 } from "../constants/editorConstants";
 import { useCanvasEvents } from "./useCanvasEvents";
-import { isTextType } from "../utils/utils";
+import { createFilter, isTextType } from "../utils/utils";
 import { Editor } from "@/interfaces/Editor";
 import { UseEditorProps } from "@/interfaces/UseEditorProps";
 
@@ -65,8 +66,24 @@ const buildEditor = ({
   };
 
   return {
+    changeImageFilter: (value: string) => {
+      const objects = canvas.getActiveObjects();
+      objects.forEach((object) => {
+        if (object.type === "image") {
+          const imageObject = object as fabric.FabricImage;
+
+          const effect = createFilter(value);
+
+          imageObject.filters = effect ? [effect] : [];
+          imageObject.applyFilters();
+          canvas.renderAll();
+        }
+      });
+    },
     addImage: (value: string) => {
       const newImage = new Image();
+      // This is needed to apply filters
+      newImage.crossOrigin = "anonymous";
       newImage.onload = function () {
         const imageToAddToCanvas = new fabric.FabricImage(newImage, {});
         addToCanvas(imageToAddToCanvas);
@@ -143,17 +160,6 @@ const buildEditor = ({
         }
       });
       canvas.renderAll();
-    },
-    getActiveOpacity: () => {
-      const selectedObject = selectedObjects[0];
-
-      if (!selectedObject) {
-        return 1;
-      }
-
-      const value = selectedObject.get("opacity") || 1;
-      // Currently, Gradients and patterns are not supported
-      return value as number;
     },
     bringForward: () => {
       canvas.getActiveObjects().forEach((object) => {
@@ -326,6 +332,16 @@ const buildEditor = ({
       );
 
       addToCanvas(object);
+    },
+    getActiveOpacity: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return 1;
+      }
+
+      const value = selectedObject.get("opacity") || 1;
+      return value as number;
     },
     getActiveFillColor: () => {
       const selectedObject = selectedObjects[0];
