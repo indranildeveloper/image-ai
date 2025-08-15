@@ -30,4 +30,6 @@ export type BuildEditorProps = {
   setFillColor: (value: string) => void;
   setStrokeColor: (value: string) => void;
   setStrokeWidth: (value: number) => void;
+  copy: () => void;
+  paste: () => void;
 };

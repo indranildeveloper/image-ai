@@ -38,6 +38,8 @@ export interface Editor {
   getActiveFontUnderline: () => boolean;
   getActiveTextAlign: () => ITextboxOptions["textAlign"];
   getActiveFontSize: () => number;
+  copyObject: () => void;
+  pasteObject: () => void;
   selectedObjects: fabric.FabricObject[];
   canvas: fabric.Canvas;
 }
