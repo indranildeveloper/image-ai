@@ -1,6 +1,7 @@
 "use client";
 
 import { FC } from "react";
+import { useFilePicker } from "use-file-picker";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,6 +29,22 @@ const Navbar: FC<NavbarProps> = ({
   activeTool,
   onChangeActiveTool,
 }) => {
+  const { openFilePicker } = useFilePicker({
+    accept: ".json",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onFilesSuccessfullySelected: ({ plainFiles }: any) => {
+      if (plainFiles && plainFiles.length > 0) {
+        const file = plainFiles[0];
+        const reader = new FileReader();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        reader.readAsText(file, "UTF-8");
+        reader.onload = () => {
+          editor?.loadJSON(reader.result as string);
+        };
+      }
+    },
+  });
+
   return (
     <nav className="flex h-[68px] w-full items-center gap-x-8 border-b p-4 lg:pl-[34px]">
       <Logo />
@@ -41,7 +58,7 @@ const Navbar: FC<NavbarProps> = ({
           <DropdownMenuContent align="start" className="min-w-60">
             <DropdownMenuItem
               className="flex items-center gap-x-2"
-              onClick={() => {}}
+              onClick={() => openFilePicker()}
             >
               <CiFileOn className="size-8" />
               <div>
@@ -100,7 +117,7 @@ const Navbar: FC<NavbarProps> = ({
             <DropdownMenuContent align="end" className="min-w-60">
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => editor?.saveJSON()}
               >
                 <CiFileOn className="size-8" />
                 <div>
@@ -112,7 +129,7 @@ const Navbar: FC<NavbarProps> = ({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => editor?.savePNG()}
               >
                 <CiFileOn className="size-8" />
                 <div>
@@ -124,7 +141,7 @@ const Navbar: FC<NavbarProps> = ({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => editor?.saveJPG()}
               >
                 <CiFileOn className="size-8" />
                 <div>
@@ -136,7 +153,7 @@ const Navbar: FC<NavbarProps> = ({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => editor?.saveSVG()}
               >
                 <CiFileOn className="size-8" />
                 <div>

@@ -58,6 +58,11 @@ export interface Editor {
   handleRedo: () => void;
   canUndo: () => boolean;
   canRedo: () => boolean;
+  savePNG: () => void;
+  saveJPG: () => void;
+  saveSVG: () => void;
+  saveJSON: () => void;
+  loadJSON: (json: string) => void;
   selectedObjects: fabric.FabricObject[];
   canvas: fabric.Canvas;
 }

@@ -22,13 +22,19 @@ import {
   TRIANGLE_OPTIONS,
 } from "../constants/editorConstants";
 import { useCanvasEvents } from "./useCanvasEvents";
-import { createFilter, isTextType } from "../utils/utils";
+import {
+  createFilter,
+  downloadFile,
+  isTextType,
+  transformText,
+} from "../utils/utils";
 import { Editor } from "@/interfaces/Editor";
 import { UseEditorProps } from "@/interfaces/UseEditorProps";
 import { useClipboard } from "./useClipboard";
 import { useHistory } from "./useHistory";
 import { JSON_KEYS } from "../constants/history";
 import { useHotKeys } from "./useHotkeys";
+import { useWindowEvents } from "./useWindowEvents";
 
 const buildEditor = ({
   save,
@@ -61,6 +67,72 @@ const buildEditor = ({
     );
   };
 
+  const generateSaveOptions = () => {
+    const { width, height, left, top } = getWorkSpace() as fabric.Rect;
+
+    return {
+      name: "Image",
+      format: "png" as fabric.ImageFormat,
+      quality: 1,
+      multiplier: 1,
+      width,
+      height,
+      left,
+      top,
+    };
+  };
+
+  const savePNG = () => {
+    const options = generateSaveOptions();
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+
+    downloadFile(dataUrl, "png");
+    autoZoom();
+  };
+
+  const saveSVG = () => {
+    const options = generateSaveOptions();
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+
+    downloadFile(dataUrl, "svg");
+    autoZoom();
+  };
+
+  const saveJPG = () => {
+    const options = generateSaveOptions();
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+
+    downloadFile(dataUrl, "jpg");
+    autoZoom();
+  };
+
+  const saveJSON = () => {
+    const dataUrl = canvas.toObject(JSON_KEYS);
+
+    transformText(dataUrl.objects);
+
+    const fileString = `data:text/json;charset=utf-8,${encodeURIComponent(
+      JSON.stringify(dataUrl, null, "\t"),
+    )}`;
+
+    downloadFile(fileString, "json");
+  };
+
+  const loadJSON = (json: string) => {
+    const data: string | Record<string, unknown> = JSON.parse(json);
+    canvas
+      .loadFromJSON(data)
+      .then(() => {
+        autoZoom();
+      })
+      .catch((error) => {
+        console.error("Something went wrong while loading the file!", error);
+      });
+  };
+
   const centerObject = (object: fabric.FabricObject) => {
     const workspace = getWorkSpace();
     const center = workspace?.getCenterPoint();
@@ -77,6 +149,11 @@ const buildEditor = ({
   };
 
   return {
+    savePNG: () => savePNG(),
+    saveSVG: () => saveSVG(),
+    saveJPG: () => saveJPG(),
+    saveJSON: () => saveJSON(),
+    loadJSON: (json: string) => loadJSON(json),
     autoZoom: () => autoZoom(),
     getWorSpace: () => getWorkSpace(),
     handleUndo: () => undo(),
@@ -549,6 +626,8 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     copy,
     paste,
   });
+
+  useWindowEvents();
 
   const editor = useMemo(() => {
     if (canvas) {

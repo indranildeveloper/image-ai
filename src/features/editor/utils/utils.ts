@@ -1,4 +1,5 @@
 import * as fabric from "fabric";
+import { v4 as uuidv4 } from "uuid";
 import type { RGBColor } from "react-color";
 
 export const isTextType = (type: string | undefined) => {
@@ -111,4 +112,28 @@ export const createFilter = (value: string) => {
   }
 
   return effect;
+};
+
+export const downloadFile = (file: string, type: string) => {
+  const anchorElement = document.createElement("a");
+  anchorElement.href = file;
+  anchorElement.download = `${uuidv4()}.${type}`;
+  document.body.appendChild(anchorElement);
+  anchorElement.click();
+  anchorElement.remove();
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const transformText = (objects: any) => {
+  if (!objects) return;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  objects.forEach((item: any) => {
+    if (item.objects) {
+      transformText(item.objects);
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      item.type === "text" && item.type === "textbox";
+    }
+  });
 };

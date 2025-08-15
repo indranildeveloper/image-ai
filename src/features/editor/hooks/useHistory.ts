@@ -39,7 +39,7 @@ export const useHistory = ({ canvas }: UseHistoryProps) => {
       canvas?.renderAll();
 
       const previousIndex = historyIndex - 1;
-      const previousState: string[] = JSON.parse(
+      const previousState: string | Record<string, unknown> = JSON.parse(
         canvasHistory.current[previousIndex],
       );
 
@@ -63,7 +63,9 @@ export const useHistory = ({ canvas }: UseHistoryProps) => {
       canvas?.renderAll();
 
       const nextIndex = historyIndex + 1;
-      const nextState: string[] = JSON.parse(canvasHistory.current[nextIndex]);
+      const nextState: string | Record<string, unknown> = JSON.parse(
+        canvasHistory.current[nextIndex],
+      );
 
       canvas
         ?.loadFromJSON(nextState)
