@@ -2,6 +2,7 @@ import * as fabric from "fabric";
 import { ITextboxOptions } from "fabric/fabric-impl";
 
 export interface Editor {
+  autoZoom: () => void;
   changeImageFilter: (value: string) => void;
   addImage: (value: string) => void;
   deleteObject: () => void;
@@ -51,6 +52,8 @@ export interface Editor {
   disableDrawingMode: () => void;
   changeBackground: (value: string) => void;
   changeSize: (value: { width: number; height: number }) => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
   selectedObjects: fabric.FabricObject[];
   canvas: fabric.Canvas;
 }

@@ -69,7 +69,20 @@ const buildEditor = ({
   };
 
   return {
+    autoZoom: () => autoZoom(),
     getWorSpace: () => getWorkSpace(),
+    zoomIn: () => {
+      let zoomRatio = canvas?.getZoom();
+      zoomRatio += 0.05;
+      const center = canvas.getCenterPoint();
+      canvas.zoomToPoint(center, zoomRatio > 1 ? 1 : zoomRatio);
+    },
+    zoomOut: () => {
+      let zoomRatio = canvas?.getZoom();
+      zoomRatio -= 0.05;
+      const center = canvas.getCenterPoint();
+      canvas.zoomToPoint(center, zoomRatio < 0.2 ? 0.2 : zoomRatio);
+    },
     changeSize: (value: { width: number; height: number }) => {
       const workspace = getWorkSpace();
       workspace?.set(value);
