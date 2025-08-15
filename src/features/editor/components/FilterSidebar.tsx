@@ -5,7 +5,6 @@ import ToolSidebarHeader from "./ToolSidebarHeader";
 import ToolSidebarClose from "./ToolSidebarClose";
 import { Button } from "@/components/ui/button";
 import { filters } from "../constants/filters";
-import { IMAGE_FILTERS } from "../constants/editorConstants";
 import { FilterSidebarProps } from "@/interfaces/FilterSidebarProps";
 
 const FilterSidebar: FC<FilterSidebarProps> = ({
