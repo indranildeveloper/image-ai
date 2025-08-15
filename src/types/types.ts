@@ -32,4 +32,5 @@ export type BuildEditorProps = {
   setStrokeWidth: (value: number) => void;
   copy: () => void;
   paste: () => void;
+  autoZoom: () => void;
 };

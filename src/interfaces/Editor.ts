@@ -27,6 +27,13 @@ export interface Editor {
   addTriangle: () => void;
   addInverseTriangle: () => void;
   addDiamond: () => void;
+  getWorSpace: () =>
+    | fabric.FabricObject<
+        Partial<fabric.FabricObjectProps>,
+        fabric.SerializedObjectProps,
+        fabric.ObjectEvents
+      >
+    | undefined;
   getActiveFillColor: () => string;
   getActiveStrokeColor: () => string;
   getActiveStrokeWidth: () => number;
@@ -42,6 +49,8 @@ export interface Editor {
   pasteObject: () => void;
   enableDrawingMode: () => void;
   disableDrawingMode: () => void;
+  changeBackground: (value: string) => void;
+  changeSize: (value: { width: number; height: number }) => void;
   selectedObjects: fabric.FabricObject[];
   canvas: fabric.Canvas;
 }
