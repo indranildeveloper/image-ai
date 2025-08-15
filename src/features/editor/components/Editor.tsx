@@ -75,6 +75,7 @@ const Editor: FC = () => {
   return (
     <div className="flex h-screen flex-col">
       <Navbar
+        editor={editor}
         activeTool={activeTool}
         onChangeActiveTool={handleChangeActiveTool}
       />

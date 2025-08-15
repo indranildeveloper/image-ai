@@ -18,6 +18,11 @@ export type ActiveTool =
   | "templates";
 
 export type BuildEditorProps = {
+  save: (skip?: boolean) => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
+  undo: () => void;
+  redo: () => void;
   canvas: fabric.Canvas;
   fillColor: string;
   strokeColor: string;

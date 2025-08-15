@@ -22,7 +22,11 @@ export const useAutoResize = ({ canvas, container }: UseAutoResizeProps) => {
       // @ts-expect-error name is assigned
       .find((object) => object.name === "clip");
 
-    const scale = fabric.util.findScaleToFit(localWorkspace!, {
+    if (!localWorkspace) {
+      console.error("Workspace object not found on canvas.");
+      return;
+    }
+    const scale = fabric.util.findScaleToFit(localWorkspace, {
       width,
       height,
     });

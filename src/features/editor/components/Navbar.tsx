@@ -23,7 +23,11 @@ import Hint from "@/components/shared/Hint";
 import { NavbarProps } from "@/interfaces/NavbarProps";
 import { cn } from "@/lib/utils";
 
-const Navbar: FC<NavbarProps> = ({ activeTool, onChangeActiveTool }) => {
+const Navbar: FC<NavbarProps> = ({
+  editor,
+  activeTool,
+  onChangeActiveTool,
+}) => {
   return (
     <nav className="flex h-[68px] w-full items-center gap-x-8 border-b p-4 lg:pl-[34px]">
       <Logo />
@@ -61,12 +65,22 @@ const Navbar: FC<NavbarProps> = ({ activeTool, onChangeActiveTool }) => {
           </Button>
         </Hint>
         <Hint label="Undo" side="bottom">
-          <Button variant="ghost" size="icon" className="" onClick={() => {}}>
+          <Button
+            variant="ghost"
+            size="icon"
+            disabled={!editor?.canUndo()}
+            onClick={() => editor?.handleUndo()}
+          >
             <Undo2Icon className="size-4" />
           </Button>
         </Hint>
         <Hint label="Redo" side="bottom">
-          <Button variant="ghost" size="icon" className="" onClick={() => {}}>
+          <Button
+            variant="ghost"
+            size="icon"
+            disabled={!editor?.canRedo()}
+            onClick={() => editor?.handleRedo()}
+          >
             <Redo2Icon className="size-4" />
           </Button>
         </Hint>

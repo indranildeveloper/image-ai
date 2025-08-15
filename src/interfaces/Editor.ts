@@ -54,6 +54,10 @@ export interface Editor {
   changeSize: (value: { width: number; height: number }) => void;
   zoomIn: () => void;
   zoomOut: () => void;
+  handleUndo: () => void;
+  handleRedo: () => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
   selectedObjects: fabric.FabricObject[];
   canvas: fabric.Canvas;
 }

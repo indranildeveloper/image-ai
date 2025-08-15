@@ -26,8 +26,15 @@ import { createFilter, isTextType } from "../utils/utils";
 import { Editor } from "@/interfaces/Editor";
 import { UseEditorProps } from "@/interfaces/UseEditorProps";
 import { useClipboard } from "./useClipboard";
+import { useHistory } from "./useHistory";
+import { JSON_KEYS } from "../constants/history";
 
 const buildEditor = ({
+  save,
+  canUndo,
+  canRedo,
+  undo,
+  redo,
   canvas,
   fillColor,
   setFillColor,
@@ -71,6 +78,10 @@ const buildEditor = ({
   return {
     autoZoom: () => autoZoom(),
     getWorSpace: () => getWorkSpace(),
+    handleUndo: () => undo(),
+    handleRedo: () => redo(),
+    canUndo: () => canUndo(),
+    canRedo: () => canRedo(),
     zoomIn: () => {
       let zoomRatio = canvas?.getZoom();
       zoomRatio += 0.05;
@@ -87,13 +98,13 @@ const buildEditor = ({
       const workspace = getWorkSpace();
       workspace?.set(value);
       autoZoom();
-      // TODO: save
+      save();
     },
     changeBackground: (value: string) => {
       const workspace = getWorkSpace();
       workspace?.set({ fill: value });
       canvas.renderAll();
-      // TODO: save
+      save();
     },
     copyObject: () => copy(),
     pasteObject: () => paste(),
@@ -520,15 +531,23 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     useState<number[]>(STROKE_DASH_ARRAY);
   const [fontFamily, setFontFamily] = useState<string>(FONT_FAMILY);
 
+  const { save, canUndo, canRedo, undo, redo, canvasHistory, setHistoryIndex } =
+    useHistory({ canvas });
+
   const { copy, paste } = useClipboard({ canvas });
 
   const { autoZoom } = useAutoResize({ canvas, container });
 
-  useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
+  useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback, save });
 
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
+        save,
+        canUndo,
+        canRedo,
+        undo,
+        redo,
         canvas,
         fillColor,
         setFillColor,
@@ -559,6 +578,11 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     copy,
     paste,
     autoZoom,
+    save,
+    canUndo,
+    canRedo,
+    undo,
+    redo,
   ]);
 
   const init = useCallback(
@@ -605,8 +629,13 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
 
       setCanvas(initialCanvas);
       setContainer(initialContainer);
+
+      const currentState = JSON.stringify(initialCanvas.toObject(JSON_KEYS));
+
+      canvasHistory.current = [currentState];
+      setHistoryIndex(0);
     },
-    [],
+    [canvasHistory, setHistoryIndex],
   );
 
   return { init, editor };
