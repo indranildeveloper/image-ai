@@ -16,6 +16,7 @@ import {
   ArrowDownIcon,
   ArrowUpIcon,
   ChevronDownIcon,
+  SquareSplitHorizontalIcon,
   TrashIcon,
 } from "lucide-react";
 import { isImageType, isTextType } from "../utils/utils";
@@ -323,6 +324,20 @@ const Toolbar: FC<ToolbarProps> = ({
               className={cn(activeTool === "filter" && "bg-slate-100")}
             >
               <TbColorFilter className="size-4" />
+            </Button>
+          </Hint>
+        </div>
+      )}
+      {isImageSelected && (
+        <div className="flex h-full items-center justify-center">
+          <Hint label="Remove Background" side="bottom">
+            <Button
+              onClick={() => onChangeActiveTool("remove-bg")}
+              size="icon"
+              variant="ghost"
+              className={cn(activeTool === "remove-bg" && "bg-slate-100")}
+            >
+              <SquareSplitHorizontalIcon className="size-4" />
             </Button>
           </Hint>
         </div>
