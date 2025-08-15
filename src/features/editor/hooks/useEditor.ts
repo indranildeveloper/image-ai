@@ -28,6 +28,7 @@ import { UseEditorProps } from "@/interfaces/UseEditorProps";
 import { useClipboard } from "./useClipboard";
 import { useHistory } from "./useHistory";
 import { JSON_KEYS } from "../constants/history";
+import { useHotKeys } from "./useHotkeys";
 
 const buildEditor = ({
   save,
@@ -539,6 +540,15 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
   const { autoZoom } = useAutoResize({ canvas, container });
 
   useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback, save });
+
+  useHotKeys({
+    canvas,
+    undo,
+    redo,
+    save,
+    copy,
+    paste,
+  });
 
   const editor = useMemo(() => {
     if (canvas) {
