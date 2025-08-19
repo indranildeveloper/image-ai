@@ -213,6 +213,7 @@ const buildEditor = ({
       });
     },
     addImage: (value: string) => {
+      // TODO: Update this code
       const newImage = new Image();
       // This is needed to apply filters
       newImage.crossOrigin = "anonymous";

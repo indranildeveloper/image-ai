@@ -1,11 +1,13 @@
 import { FC } from "react";
-import { Button } from "@/components/ui/button";
+import { auth } from "@/auth";
 
-const HomePage: FC = () => {
+const HomePage: FC = async () => {
+  const session = await auth();
+
   return (
     <div>
       <h1>Home Page</h1>
-      <Button>Click me</Button>
+      <p>{JSON.stringify(session)}</p>
     </div>
   );
 };
