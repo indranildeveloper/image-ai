@@ -1,13 +1,12 @@
 import { FC } from "react";
-import { auth } from "@/auth";
+import { protectServer } from "@/features/auth/utils/utils";
 
 const HomePage: FC = async () => {
-  const session = await auth();
+  await protectServer();
 
   return (
     <div>
-      <h1>Home Page</h1>
-      <p>{JSON.stringify(session)}</p>
+      <p>You are logged in!</p>
     </div>
   );
 };
