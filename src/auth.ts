@@ -1,9 +1,13 @@
 import NextAuth from "next-auth";
+import bcrypt from "bcryptjs";
+import { eq } from "drizzle-orm";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "./db/drizzle";
+import { credentialsSchema } from "./validators/credentialsValidator";
+import { users } from "./db/schema";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -12,10 +16,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      // eslint-disable-next-line @typescript-eslint/require-await
       async authorize(credentials) {
-        console.log({ credentials });
-        return null;
+        const validatedFields = credentialsSchema.safeParse(credentials);
+
+        if (!validatedFields.success) {
+          return null;
+        }
+
+        const { email, password } = validatedFields.data;
+
+        const query = await db
+          .select()
+          .from(users)
+          .where(eq(users.email, email));
+
+        const user = query[0];
+
+        if (!user || !user.password) {
+          return null;
+        }
+
+        const isValidPassword = await bcrypt.compare(password, user.password);
+
+        if (!isValidPassword) {
+          return null;
+        }
+
+        return user;
       },
     }),
     GitHubProvider,

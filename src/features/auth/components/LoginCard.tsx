@@ -2,6 +2,7 @@
 
 import { FC, FormEvent } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
@@ -29,8 +30,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { TriangleAlertIcon } from "lucide-react";
 
 const LoginCard: FC = () => {
+  const params = useSearchParams();
   const loginForm = useForm<TLoginFormValidator>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -38,6 +41,8 @@ const LoginCard: FC = () => {
       password: "",
     },
   });
+
+  const errorParams = params.get("error");
 
   const handleProviderLogIn = async (provider: "github" | "google") => {
     await signIn(provider, { callbackUrl: "/" });
@@ -55,9 +60,14 @@ const LoginCard: FC = () => {
     <Card className="h-full w-full p-8">
       <CardHeader className="px-0 pt-0">
         <CardTitle>Log In to Continue</CardTitle>
-
         <CardDescription>Use your email or OAuth to continue</CardDescription>
       </CardHeader>
+      {!!errorParams && (
+        <div className="bg-destructive/15 text-destructive flex items-center gap-x-2 rounded-md p-3 text-sm">
+          <TriangleAlertIcon className="size-4" />
+          <p>Invalid credentials!</p>
+        </div>
+      )}
       <CardContent className="space-y-5 px-0 pb-0">
         <Form {...loginForm}>
           <form

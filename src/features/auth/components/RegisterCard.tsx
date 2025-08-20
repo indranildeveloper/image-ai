@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import {
-  registerFormValidator,
+  registerFormSchema,
   TRegisterFormValidator,
 } from "@/validators/registerFormValidator";
 import {
@@ -29,10 +29,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useRegister } from "../api/useRegister";
 
 const RegisterCard: FC = () => {
   const registerForm = useForm<TRegisterFormValidator>({
-    resolver: zodResolver(registerFormValidator),
+    resolver: zodResolver(registerFormSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -40,19 +41,37 @@ const RegisterCard: FC = () => {
     },
   });
 
+  const mutation = useRegister();
+
   const handleProviderLogIn = async (provider: "github" | "google") => {
     await signIn(provider, { callbackUrl: "/" });
   };
 
   const handleCredentialsRegister = (values: TRegisterFormValidator) => {
-    console.log(values);
+    mutation.mutate(
+      {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      },
+      {
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        onSuccess: async () => {
+          registerForm.reset();
+          await signIn("credentials", {
+            email: values.email,
+            password: values.password,
+            callbackUrl: "/",
+          });
+        },
+      },
+    );
   };
 
   return (
     <Card className="h-full w-full p-8">
       <CardHeader className="px-0 pt-0">
         <CardTitle>Register to Continue</CardTitle>
-
         <CardDescription>Use your email or OAuth to continue</CardDescription>
       </CardHeader>
       <CardContent className="space-y-5 px-0 pb-0">
@@ -72,6 +91,7 @@ const RegisterCard: FC = () => {
                     <Input
                       type="text"
                       placeholder="Enter your name"
+                      disabled={mutation.isPending}
                       required
                       {...field}
                     />
@@ -90,6 +110,7 @@ const RegisterCard: FC = () => {
                     <Input
                       type="email"
                       placeholder="Enter your email"
+                      disabled={mutation.isPending}
                       required
                       {...field}
                     />
@@ -108,6 +129,7 @@ const RegisterCard: FC = () => {
                     <Input
                       type="password"
                       placeholder="Enter your password"
+                      disabled={mutation.isPending}
                       required
                       {...field}
                     />
@@ -117,8 +139,13 @@ const RegisterCard: FC = () => {
               )}
             />
 
-            <Button type="submit" size="lg" className="w-full">
-              Log In
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full"
+              disabled={mutation.isPending}
+            >
+              Register
             </Button>
           </form>
         </Form>
@@ -128,6 +155,7 @@ const RegisterCard: FC = () => {
             variant="outline"
             size="lg"
             className="w-full"
+            disabled={mutation.isPending}
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onClick={() => handleProviderLogIn("github")}
           >
@@ -138,6 +166,7 @@ const RegisterCard: FC = () => {
             variant="outline"
             size="lg"
             className="w-full"
+            disabled={mutation.isPending}
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onClick={() => handleProviderLogIn("google")}
           >
