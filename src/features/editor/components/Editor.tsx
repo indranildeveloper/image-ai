@@ -22,8 +22,9 @@ import DrawSidebar from "./DrawSidebar";
 import SettingsSidebar from "./SettingsSidebar";
 import { SELECTION_DEPENDENT_TOOLS } from "../constants/editorConstants";
 import { ActiveTool } from "@/types/types";
+import { EditorProps } from "@/interfaces/EditorProps";
 
-const Editor: FC = () => {
+const Editor: FC<EditorProps> = ({ initialData }) => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);

@@ -1,59 +1,101 @@
 import { Hono } from "hono";
+import { eq, and } from "drizzle-orm";
 import { verifyAuth } from "@hono/auth-js";
 import { zValidator } from "@hono/zod-validator";
 import { projects, projectsInsertSchema } from "@/db/schema";
 import { db } from "@/db/drizzle";
+import { projectSchema } from "@/validators/projectValidator";
 
-const app = new Hono().post(
-  "/",
-  verifyAuth(),
-  zValidator(
-    "json",
-    projectsInsertSchema.pick({
-      name: true,
-      json: true,
-      width: true,
-      height: true,
-    }),
-  ),
-  async (ctx) => {
-    const auth = ctx.get("authUser");
+const app = new Hono()
+  .get(
+    "/:projectId",
+    verifyAuth(),
+    zValidator("param", projectSchema),
+    async (ctx) => {
+      const auth = ctx.get("authUser");
 
-    const { name, json, height, width } = ctx.req.valid("json");
+      const { projectId } = ctx.req.valid("param");
 
-    if (!auth.token?.id) {
-      return ctx.json(
-        {
-          error: "Unauthorized",
-        },
-        401,
-      );
-    }
+      if (!auth.token?.id) {
+        return ctx.json(
+          {
+            error: "Unauthorized!",
+          },
+          401,
+        );
+      }
 
-    const data = await db
-      .insert(projects)
-      .values({
-        name,
-        json,
-        height,
-        width,
-        userId: auth.token.id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })
-      .returning();
+      const data = await db
+        .select()
+        .from(projects)
+        .where(
+          and(eq(projects.id, projectId), eq(projects.userId, auth.token.id)),
+        );
 
-    if (!data[0]) {
-      return ctx.json(
-        {
-          error: "Something went wrong",
-        },
-        400,
-      );
-    }
+      if (data?.length === 0) {
+        return ctx.json(
+          {
+            error: "Project not found!",
+          },
+          404,
+        );
+      }
 
-    return ctx.json({ data: data[0] });
-  },
-);
+      return ctx.json({
+        data: data[0],
+      });
+    },
+  )
+  .post(
+    "/",
+    verifyAuth(),
+    zValidator(
+      "json",
+      projectsInsertSchema.pick({
+        name: true,
+        json: true,
+        width: true,
+        height: true,
+      }),
+    ),
+    async (ctx) => {
+      const auth = ctx.get("authUser");
+
+      const { name, json, height, width } = ctx.req.valid("json");
+
+      if (!auth.token?.id) {
+        return ctx.json(
+          {
+            error: "Unauthorized!",
+          },
+          401,
+        );
+      }
+
+      const data = await db
+        .insert(projects)
+        .values({
+          name,
+          json,
+          height,
+          width,
+          userId: auth.token.id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .returning();
+
+      if (!data[0]) {
+        return ctx.json(
+          {
+            error: "Something went wrong",
+          },
+          400,
+        );
+      }
+
+      return ctx.json({ data: data[0] });
+    },
+  );
 
 export default app;
