@@ -35,7 +35,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/core@npm:0.40.0":
+"@auth/core@npm:0.40.0, @auth/core@npm:^0.40.0":
   version: 0.40.0
   resolution: "@auth/core@npm:0.40.0"
   dependencies:
@@ -646,6 +646,17 @@ __metadata:
   version: 0.2.10
   resolution: "@floating-ui/utils@npm:0.2.10"
   checksum: 10c0/e9bc2a1730ede1ee25843937e911ab6e846a733a4488623cd353f94721b05ec2c9ec6437613a2ac9379a94c2fd40c797a2ba6fa1df2716f5ce4aa6ddb1cf9ea4
+  languageName: node
+  linkType: hard
+
+"@hono/auth-js@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@hono/auth-js@npm:1.1.0"
+  peerDependencies:
+    "@auth/core": ">=0.35.0"
+    hono: ">=3.0.0"
+    react: ^18 || ^19 || ^19.0.0-rc
+  checksum: 10c0/911d285a8c1d60eb6db954660eff734f571005297165e8879f6da0fbbbe4df667059381cc0ef933427a9490d40485526ed83a6a952332ce160ce9ed66596f644
   languageName: node
   linkType: hard
 
@@ -4938,9 +4949,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "image-ai@workspace:."
   dependencies:
+    "@auth/core": "npm:^0.40.0"
     "@auth/drizzle-adapter": "npm:^1.10.0"
     "@eslint/eslintrc": "npm:^3.3.1"
     "@eslint/js": "npm:^9.33.0"
+    "@hono/auth-js": "npm:^1.1.0"
     "@hono/zod-validator": "npm:^0.7.2"
     "@hookform/resolvers": "npm:^5.2.1"
     "@neondatabase/serverless": "npm:^1.0.1"

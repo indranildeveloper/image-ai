@@ -1,9 +1,8 @@
+import { auth } from "@/auth";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
-
-const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
 
 export const ourFileRouter = {
   imageUploader: f({
@@ -12,17 +11,16 @@ export const ourFileRouter = {
       maxFileCount: 1,
     },
   })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .middleware(async ({ req }) => {
-      // TODO: replace with next-auth
-      // eslint-disable-next-line @typescript-eslint/await-thenable
-      const user = await auth(req);
+      const session = await auth();
 
       // eslint-disable-next-line @typescript-eslint/only-throw-error
-      if (!user) throw new UploadThingError("Unauthorized");
+      if (!session) throw new UploadThingError("Unauthorized");
 
-      return { userId: user.id };
+      return { userId: session.user?.id };
     })
-    // eslint-disable-next-line @typescript-eslint/require-await
+    // eslint-disable-next-line @typescript-eslint/require-await, @typescript-eslint/no-unused-vars
     .onUploadComplete(async ({ metadata, file }) => {
       return { url: file.ufsUrl };
     }),
