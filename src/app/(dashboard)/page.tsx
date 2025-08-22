@@ -1,16 +1,13 @@
 import { FC } from "react";
-import { auth } from "@/auth";
 import { protectServer } from "@/features/auth/utils/utils";
+import DashboardBanner from "@/components/shared/dashboard/DashboardBanner";
 
 const HomePage: FC = async () => {
   await protectServer();
 
-  const session = await auth();
-
   return (
-    <div>
-      <p>You are logged in!</p>
-      <div>{JSON.stringify(session)}</div>
+    <div className="mx-auto flex max-w-screen-xl flex-col space-y-6 pb-10">
+      <DashboardBanner />
     </div>
   );
 };
