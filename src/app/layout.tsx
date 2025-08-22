@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { RootLayoutProps } from "@/interfaces/RootLayoutProps";
 
 import "@/styles/globals.css";
+import AuthProvider from "@/components/providers/AuthProvider";
 
 const interSans = Inter({
   variable: "--font-inter-sans",
@@ -28,7 +29,9 @@ const RootLayout: FC<Readonly<RootLayoutProps>> = ({ children }) => {
       <body
         className={`${interSans.variable} ${firaCode.variable} antialiased`}
       >
-        <Providers>{children}</Providers>
+        <AuthProvider>
+          <Providers>{children}</Providers>
+        </AuthProvider>
         <Toaster theme="light" richColors />
       </body>
     </html>

@@ -21,8 +21,9 @@ import {
 } from "lucide-react";
 import Logo from "./Logo";
 import Hint from "@/components/shared/Hint";
-import { NavbarProps } from "@/interfaces/NavbarProps";
+import UserButton from "@/features/auth/components/UserButton";
 import { cn } from "@/lib/utils";
+import { NavbarProps } from "@/interfaces/NavbarProps";
 
 const Navbar: FC<NavbarProps> = ({
   editor,
@@ -165,7 +166,7 @@ const Navbar: FC<NavbarProps> = ({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          {/* TODO: Add user button */}
+          <UserButton />
         </div>
       </div>
     </nav>
