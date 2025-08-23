@@ -29,7 +29,16 @@ export const useUpdateProject = (projectId: string) => {
       return await response.json();
     },
     onSuccess: () => {
-      // TODO: invalidate projects query
+      queryClient
+        .invalidateQueries({
+          queryKey: ["projects"],
+        })
+        .catch((error) => {
+          console.error(
+            "Something went wrong while invalidating projects query!",
+            error,
+          );
+        });
       queryClient
         .invalidateQueries({ queryKey: ["project", { projectId }] })
         .catch((error) => {
