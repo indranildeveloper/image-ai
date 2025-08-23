@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import * as fabric from "fabric";
 import { ITextboxOptions } from "fabric/fabric-impl";
 import { useAutoResize } from "./useAutoResize";
@@ -35,6 +35,7 @@ import { useHistory } from "./useHistory";
 import { JSON_KEYS } from "../constants/history";
 import { useHotKeys } from "./useHotkeys";
 import { useWindowEvents } from "./useWindowEvents";
+import { useLoadState } from "./useLoadState";
 
 const buildEditor = ({
   save,
@@ -597,7 +598,17 @@ const buildEditor = ({
   };
 };
 
-export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
+export const useEditor = ({
+  defaultState,
+  defaultHeight,
+  defaultWidth,
+  clearSelectionCallback,
+  saveCallback,
+}: UseEditorProps) => {
+  const initialState = useRef<string | null>(defaultState);
+  const initialHeight = useRef<number>(defaultHeight);
+  const initialWidth = useRef<number>(defaultWidth);
+
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [selectedObjects, setSelectedObjects] = useState<fabric.FabricObject[]>(
@@ -611,7 +622,7 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
   const [fontFamily, setFontFamily] = useState<string>(FONT_FAMILY);
 
   const { save, canUndo, canRedo, undo, redo, canvasHistory, setHistoryIndex } =
-    useHistory({ canvas });
+    useHistory({ canvas, saveCallback });
 
   const { copy, paste } = useClipboard({ canvas });
 
@@ -629,6 +640,14 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
   });
 
   useWindowEvents();
+
+  useLoadState({
+    canvas,
+    autoZoom,
+    initialState,
+    canvasHistory,
+    setHistoryIndex,
+  });
 
   const editor = useMemo(() => {
     if (canvas) {
@@ -696,8 +715,8 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
       };
 
       const initialWorkspace = new fabric.Rect({
-        width: 900,
-        height: 1200,
+        width: initialWidth.current,
+        height: initialHeight.current,
         name: "clip",
         fill: "white",
         selectable: false,

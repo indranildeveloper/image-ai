@@ -103,6 +103,7 @@ const Navbar: FC<NavbarProps> = ({
           </Button>
         </Hint>
         <Separator orientation="vertical" className="mx-2" />
+
         <div className="flex items-center gap-x-2">
           <BsCloudCheck className="text-muted-foreground size-[20px]" />
           <div className="text-muted-foreground text-xs">Saved</div>

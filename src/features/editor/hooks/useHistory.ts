@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { UseHistoryProps } from "@/interfaces/UseHistoryProps";
 import { JSON_KEYS } from "../constants/history";
 
-export const useHistory = ({ canvas }: UseHistoryProps) => {
+export const useHistory = ({ canvas, saveCallback }: UseHistoryProps) => {
   const [historyIndex, setHistoryIndex] = useState<number>(0);
   const canvasHistory = useRef<string[]>([]);
   const skipSave = useRef<boolean>(false);
@@ -27,9 +27,21 @@ export const useHistory = ({ canvas }: UseHistoryProps) => {
         setHistoryIndex(canvasHistory.current.length - 1);
       }
 
-      // TODO: save callback
+      const workspace = canvas
+        .getObjects()
+        // @ts-expect-error name is assigned
+        .find((object) => object.name === "clip");
+
+      const height = workspace?.height ?? 0;
+      const width = workspace?.width ?? 0;
+
+      saveCallback?.({
+        json,
+        height,
+        width,
+      });
     },
-    [canvas],
+    [canvas, saveCallback],
   );
 
   const undo = useCallback(() => {

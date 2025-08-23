@@ -23,11 +23,14 @@ import SettingsSidebar from "./SettingsSidebar";
 import { SELECTION_DEPENDENT_TOOLS } from "../constants/editorConstants";
 import { ActiveTool } from "@/types/types";
 import { EditorProps } from "@/interfaces/EditorProps";
+import { useUpdateProject } from "@/features/projects/api/useUpdateProject";
 
 const Editor: FC<EditorProps> = ({ initialData }) => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const { mutate } = useUpdateProject(initialData.id);
 
   const handleClearSelection = useCallback(() => {
     if (SELECTION_DEPENDENT_TOOLS.includes(activeTool)) {
@@ -35,8 +38,21 @@ const Editor: FC<EditorProps> = ({ initialData }) => {
     }
   }, [activeTool]);
 
+  const debouncedSave = useCallback(
+    (values: { json: string; height: number; width: number }) => {
+      // TODO: add debounce
+
+      mutate(values);
+    },
+    [mutate],
+  );
+
   const { init, editor } = useEditor({
+    defaultState: initialData.json,
+    defaultHeight: initialData.height,
+    defaultWidth: initialData.width,
     clearSelectionCallback: handleClearSelection,
+    saveCallback: debouncedSave,
   });
 
   useEffect(() => {
