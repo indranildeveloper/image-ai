@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { useGetProjects } from "@/features/projects/api/useGetProjects";
+import { useDuplicateProject } from "@/features/projects/api/useDuplicateProject";
 import {
   AlertTriangleIcon,
   CopyIcon,
@@ -26,6 +27,11 @@ const ProjectsSection: FC = () => {
   const router = useRouter();
   const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useGetProjects();
+  const duplicateMutation = useDuplicateProject();
+
+  const handleCopyProject = (projectId: string) => {
+    duplicateMutation.mutate({ projectId });
+  };
 
   if (status === "pending") {
     return (
@@ -104,8 +110,8 @@ const ProjectsSection: FC = () => {
                       <DropdownMenuContent align="end" className="w-60">
                         <DropdownMenuItem
                           className="h-10 cursor-pointer"
-                          disabled={false}
-                          onClick={() => {}}
+                          disabled={duplicateMutation.isPending}
+                          onClick={() => handleCopyProject(project.id)}
                         >
                           <CopyIcon className="size-4" />
                           <span>Make a copy</span>

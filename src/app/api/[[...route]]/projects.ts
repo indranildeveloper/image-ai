@@ -131,6 +131,66 @@ const app = new Hono()
       return ctx.json({ data: data[0] });
     },
   )
+  .post(
+    "/:projectId/duplicate",
+    verifyAuth(),
+    zValidator("param", projectSchema),
+    async (ctx) => {
+      const auth = ctx.get("authUser");
+      const { projectId } = ctx.req.valid("param");
+
+      if (!auth.token?.id) {
+        return ctx.json(
+          {
+            error: "Unauthorized!",
+          },
+          401,
+        );
+      }
+
+      const data = await db
+        .select()
+        .from(projects)
+        .where(
+          and(eq(projects.id, projectId), eq(projects.userId, auth.token.id)),
+        );
+
+      if (data.length === 0) {
+        return ctx.json(
+          {
+            error: "Project not found!",
+          },
+          404,
+        );
+      }
+
+      const project = data[0];
+
+      const duplicateData = await db
+        .insert(projects)
+        .values({
+          name: `Copy of ${project.name}`,
+          json: project.json,
+          height: project.height,
+          width: project.width,
+          userId: auth.token.id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .returning();
+
+      if (!duplicateData[0]) {
+        return ctx.json(
+          {
+            error: "Something went wrong while copying the project!",
+          },
+          400,
+        );
+      }
+
+      return ctx.json({ data: duplicateData[0] });
+    },
+  )
   .patch(
     "/:projectId",
     verifyAuth(),
