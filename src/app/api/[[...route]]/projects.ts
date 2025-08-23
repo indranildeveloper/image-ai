@@ -234,6 +234,42 @@ const app = new Hono()
 
       return ctx.json({ data: data[0] });
     },
+  )
+  .delete(
+    "/:projectId",
+    verifyAuth(),
+    zValidator("param", projectSchema),
+    async (ctx) => {
+      const auth = ctx.get("authUser");
+      const { projectId } = ctx.req.valid("param");
+
+      if (!auth.token?.id) {
+        return ctx.json(
+          {
+            error: "Unauthorized!",
+          },
+          401,
+        );
+      }
+
+      const data = await db
+        .delete(projects)
+        .where(
+          and(eq(projects.id, projectId), eq(projects.userId, auth.token.id)),
+        )
+        .returning();
+
+      if (data.length === 0) {
+        return ctx.json(
+          {
+            error: "Project not found!",
+          },
+          404,
+        );
+      }
+
+      return ctx.json({ data: { projectId } });
+    },
   );
 
 export default app;

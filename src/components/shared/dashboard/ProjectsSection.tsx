@@ -6,6 +6,7 @@ import { formatDistanceToNow } from "date-fns";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { useGetProjects } from "@/features/projects/api/useGetProjects";
 import { useDuplicateProject } from "@/features/projects/api/useDuplicateProject";
+import { useDeleteProject } from "@/features/projects/api/useDeleteProject";
 import {
   AlertTriangleIcon,
   CopyIcon,
@@ -27,10 +28,15 @@ const ProjectsSection: FC = () => {
   const router = useRouter();
   const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useGetProjects();
-  const duplicateMutation = useDuplicateProject();
+  const copyProjectMutation = useDuplicateProject();
+  const deleteProjectMutation = useDeleteProject();
 
   const handleCopyProject = (projectId: string) => {
-    duplicateMutation.mutate({ projectId });
+    copyProjectMutation.mutate({ projectId });
+  };
+
+  const handleDeleteProject = (projectId: string) => {
+    deleteProjectMutation.mutate({ projectId });
   };
 
   if (status === "pending") {
@@ -110,7 +116,7 @@ const ProjectsSection: FC = () => {
                       <DropdownMenuContent align="end" className="w-60">
                         <DropdownMenuItem
                           className="h-10 cursor-pointer"
-                          disabled={duplicateMutation.isPending}
+                          disabled={copyProjectMutation.isPending}
                           onClick={() => handleCopyProject(project.id)}
                         >
                           <CopyIcon className="size-4" />
@@ -118,8 +124,8 @@ const ProjectsSection: FC = () => {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="h-10 cursor-pointer"
-                          disabled={false}
-                          onClick={() => {}}
+                          disabled={deleteProjectMutation.isPending}
+                          onClick={() => handleDeleteProject(project.id)}
                         >
                           <TrashIcon className="size-4" />
                           <span>Delete</span>
