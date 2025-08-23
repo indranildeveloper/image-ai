@@ -23,6 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { useConfirm } from "@/hooks/useConfirm";
 
 const ProjectsSection: FC = () => {
   const router = useRouter();
@@ -30,13 +31,20 @@ const ProjectsSection: FC = () => {
     useGetProjects();
   const copyProjectMutation = useDuplicateProject();
   const deleteProjectMutation = useDeleteProject();
+  const [ConfirmDialog, confirm] = useConfirm({
+    title: "Are you sure?",
+    message: "You are about to delete this project.",
+  });
 
   const handleCopyProject = (projectId: string) => {
     copyProjectMutation.mutate({ projectId });
   };
 
-  const handleDeleteProject = (projectId: string) => {
-    deleteProjectMutation.mutate({ projectId });
+  const handleDeleteProject = async (projectId: string) => {
+    const ok = await confirm();
+    if (ok) {
+      deleteProjectMutation.mutate({ projectId });
+    }
   };
 
   if (status === "pending") {
@@ -125,6 +133,7 @@ const ProjectsSection: FC = () => {
                         <DropdownMenuItem
                           className="h-10 cursor-pointer"
                           disabled={deleteProjectMutation.isPending}
+                          // eslint-disable-next-line @typescript-eslint/no-misused-promises
                           onClick={() => handleDeleteProject(project.id)}
                         >
                           <TrashIcon className="size-4" />
@@ -154,6 +163,7 @@ const ProjectsSection: FC = () => {
           </Button>
         </div>
       )}
+      <ConfirmDialog />
     </div>
   );
 };
