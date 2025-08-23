@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, asc } from "drizzle-orm";
 import { verifyAuth } from "@hono/auth-js";
 import { zValidator } from "@hono/zod-validator";
 import { projects, projectsInsertSchema } from "@/db/schema";
@@ -10,6 +10,28 @@ import {
 } from "@/validators/projectValidator";
 
 const app = new Hono()
+  .get(
+    "/templates",
+    verifyAuth(),
+    zValidator("query", projectsQuerySchema),
+    async (ctx) => {
+      const { page, limit } = ctx.req.valid("query");
+
+      console.log(page, limit);
+
+      const data = await db
+        .select()
+        .from(projects)
+        .where(eq(projects.isTemplate, true))
+        .limit(limit)
+        .offset((page - 1) * limit)
+        .orderBy(asc(projects.isPremium), desc(projects.updatedAt));
+
+      return ctx.json({
+        data,
+      });
+    },
+  )
   .get(
     "/",
     verifyAuth(),

@@ -72,7 +72,7 @@ const ProjectsSection: FC = () => {
     );
   }
 
-  if (!data.pages.length) {
+  if (!data.pages.length || !data.pages[0].data.length) {
     return (
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">Recent Projects</h2>
