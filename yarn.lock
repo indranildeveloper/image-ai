@@ -2180,6 +2180,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.debounce@npm:^4.0.9":
+  version: 4.0.9
+  resolution: "@types/lodash.debounce@npm:4.0.9"
+  dependencies:
+    "@types/lodash": "npm:*"
+  checksum: 10c0/9fbb24e5e52616faf60ba5c82d8c6517f4b86fc6e9ab353b4c56c0760f63d9bf53af3f2d8f6c37efa48090359fb96dba1087d497758511f6c40677002191d042
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:*":
+  version: 4.17.20
+  resolution: "@types/lodash@npm:4.17.20"
+  checksum: 10c0/98cdd0faae22cbb8079a01a3bb65aa8f8c41143367486c1cbf5adc83f16c9272a2a5d2c1f541f61d0d73da543c16ee1d21cf2ef86cb93cd0cc0ac3bced6dd88f
+  languageName: node
+  linkType: hard
+
 "@types/material-colors@npm:^1.2.3":
   version: 1.2.3
   resolution: "@types/material-colors@npm:1.2.3"
@@ -5018,6 +5034,7 @@ __metadata:
     "@tanstack/react-query": "npm:^5.85.3"
     "@types/bcryptjs": "npm:^3.0.0"
     "@types/fabric": "npm:^5.3.10"
+    "@types/lodash.debounce": "npm:^4.0.9"
     "@types/material-colors": "npm:^1.2.3"
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
@@ -5043,6 +5060,7 @@ __metadata:
     husky: "npm:^9.1.7"
     jsdom: "npm:^26.1.0"
     lint-staged: "npm:^16.1.5"
+    lodash.debounce: "npm:^4.0.8"
     lucide-react: "npm:^0.539.0"
     material-colors: "npm:^1.2.6"
     next: "npm:15.4.6"
@@ -5824,6 +5842,13 @@ __metadata:
   version: 4.17.21
   resolution: "lodash-es@npm:4.17.21"
   checksum: 10c0/fb407355f7e6cd523a9383e76e6b455321f0f153a6c9625e21a8827d10c54c2a2341bd2ae8d034358b60e07325e1330c14c224ff582d04612a46a4f0479ff2f2
+  languageName: node
+  linkType: hard
+
+"lodash.debounce@npm:^4.0.8":
+  version: 4.0.8
+  resolution: "lodash.debounce@npm:4.0.8"
+  checksum: 10c0/762998a63e095412b6099b8290903e0a8ddcb353ac6e2e0f2d7e7d03abd4275fe3c689d88960eb90b0dde4f177554d51a690f22a343932ecbc50a5d111849987
   languageName: node
   linkType: hard
 

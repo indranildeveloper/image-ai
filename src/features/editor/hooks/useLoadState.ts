@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { JSON_KEYS } from "../constants/history";
 import { UseLoadStateProps } from "@/interfaces/UseLoadStateProps";
+import { INITIAL_EDITOR_STATE } from "../constants/editorConstants";
 
 export const useLoadState = ({
   canvas,
@@ -12,7 +13,7 @@ export const useLoadState = ({
   const initialized = useRef<boolean>(false);
 
   useEffect(() => {
-    const dataToLoad = JSON.parse(initialState.current ?? "{}");
+    const dataToLoad = JSON.parse(initialState.current || INITIAL_EDITOR_STATE);
 
     if (!initialized.current && initialState?.current && canvas) {
       canvas
