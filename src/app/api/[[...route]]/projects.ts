@@ -1,12 +1,46 @@
 import { Hono } from "hono";
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import { verifyAuth } from "@hono/auth-js";
 import { zValidator } from "@hono/zod-validator";
 import { projects, projectsInsertSchema } from "@/db/schema";
 import { db } from "@/db/drizzle";
-import { projectSchema } from "@/validators/projectValidator";
+import {
+  projectSchema,
+  projectsQuerySchema,
+} from "@/validators/projectValidator";
 
 const app = new Hono()
+  .get(
+    "/",
+    verifyAuth(),
+    zValidator("query", projectsQuerySchema),
+    async (ctx) => {
+      const auth = ctx.get("authUser");
+      const { page, limit } = ctx.req.valid("query");
+
+      if (!auth.token?.id) {
+        return ctx.json(
+          {
+            error: "Unauthorized!",
+          },
+          401,
+        );
+      }
+
+      const data = await db
+        .select()
+        .from(projects)
+        .where(eq(projects.userId, auth.token.id))
+        .limit(limit)
+        .offset((page - 1) * limit)
+        .orderBy(desc(projects.updatedAt));
+
+      return ctx.json({
+        data,
+        nextPage: data.length === limit ? page + 1 : null,
+      });
+    },
+  )
   .get(
     "/:projectId",
     verifyAuth(),
