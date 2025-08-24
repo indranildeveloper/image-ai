@@ -31,9 +31,11 @@ const RootLayout: FC<Readonly<RootLayoutProps>> = ({ children }) => {
         className={`${interSans.variable} ${firaCode.variable} antialiased`}
       >
         <AuthProvider>
-          <Providers>{children}</Providers>
+          <Providers>
+            {children}
+            <Modals />
+          </Providers>
         </AuthProvider>
-        <Modals />
         <Toaster theme="light" richColors />
       </body>
     </html>

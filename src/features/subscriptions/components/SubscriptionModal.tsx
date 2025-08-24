@@ -14,9 +14,11 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { CheckCircle2Icon } from "lucide-react";
 import { useSubscriptionModal } from "../store/useSubscriptionModal";
+import { useCheckout } from "../api/useCheckout";
 
 const SubscriptionModal: FC = () => {
   const { isModalOpen, onModalClose } = useSubscriptionModal();
+  const checkoutMutation = useCheckout();
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onModalClose}>
@@ -52,7 +54,11 @@ const SubscriptionModal: FC = () => {
           </li>
         </ul>
         <DialogFooter className="mt-4 gap-y-2">
-          <Button onClick={() => {}} disabled={false} className="w-full">
+          <Button
+            onClick={() => checkoutMutation.mutate()}
+            disabled={checkoutMutation.isPending}
+            className="w-full"
+          >
             Upgrade
           </Button>
         </DialogFooter>
