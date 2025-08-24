@@ -8,6 +8,7 @@ import ToolSidebarClose from "./ToolSidebarClose";
 import { RemoveBackgroundSidebarProps } from "@/interfaces/RemoveBackgroundSidebarProps";
 import { AlertTriangleIcon } from "lucide-react";
 import { useRemoveBackground } from "@/features/ai/api/useRemoveBackground";
+import { usePaywall } from "@/features/subscriptions/hooks/usePaywall";
 
 const RemoveBackgroundSidebar: FC<RemoveBackgroundSidebarProps> = ({
   editor,
@@ -16,6 +17,7 @@ const RemoveBackgroundSidebar: FC<RemoveBackgroundSidebarProps> = ({
 }) => {
   const selectedObject = editor?.selectedObjects[0];
   const mutation = useRemoveBackground();
+  const paywall = usePaywall();
 
   // @ts-expect-error this is correct
   const currentSelectedImageUrl = selectedObject?._originalElement?.currentSrc;
@@ -25,7 +27,11 @@ const RemoveBackgroundSidebar: FC<RemoveBackgroundSidebarProps> = ({
   };
 
   const handleSubmit = () => {
-    // TODO: block with paywall
+    if (paywall.shouldBlock) {
+      paywall.triggerPaywall();
+      return;
+    }
+
     mutation.mutate(
       {
         image: currentSelectedImageUrl,

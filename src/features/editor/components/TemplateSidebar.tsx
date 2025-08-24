@@ -4,13 +4,14 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ToolSidebarHeader from "./ToolSidebarHeader";
 import ToolSidebarClose from "./ToolSidebarClose";
-import { AlertTriangleIcon, Loader2Icon } from "lucide-react";
+import { AlertTriangleIcon, CrownIcon, Loader2Icon } from "lucide-react";
 import {
   TTemplatesResponseType,
   useGetTemplates,
 } from "@/features/projects/api/useGetTemplates";
 import { useConfirm } from "@/hooks/useConfirm";
 import { TemplateSidebarProps } from "@/interfaces/TemplateSidebarProps";
+import { usePaywall } from "@/features/subscriptions/hooks/usePaywall";
 
 const TemplateSidebar: FC<TemplateSidebarProps> = ({
   editor,
@@ -29,11 +30,15 @@ const TemplateSidebar: FC<TemplateSidebarProps> = ({
     limit: "20",
     page: "1",
   });
+  const paywall = usePaywall();
 
   const handleTemplateClick = async (
     template: TTemplatesResponseType["data"][0],
   ) => {
-    // TODO: check if template is premium
+    if (template.isPremium && paywall.shouldBlock) {
+      paywall.triggerPaywall();
+      return;
+    }
 
     const ok = await confirm();
 
@@ -94,6 +99,11 @@ const TemplateSidebar: FC<TemplateSidebarProps> = ({
                       fill
                       className="object-cover"
                     />
+                    {template.isPremium && (
+                      <div className="absolute top-2 right-2 flex size-8 items-center justify-center rounded-full bg-black/50">
+                        <CrownIcon className="size-4 fill-yellow-500 text-yellow-500" />
+                      </div>
+                    )}
                     <div className="absolute bottom-0 left-0 w-full truncate bg-black/50 p-1 text-left text-[10px] text-white opacity-0 group-hover:opacity-100">
                       {template.name}
                     </div>

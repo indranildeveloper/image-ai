@@ -3,10 +3,11 @@ import type { Metadata } from "next";
 import { Inter, Fira_Code } from "next/font/google";
 import Providers from "@/components/providers/Providers";
 import { Toaster } from "@/components/ui/sonner";
+import AuthProvider from "@/components/providers/AuthProvider";
+import Modals from "@/components/shared/Modals";
 import { RootLayoutProps } from "@/interfaces/RootLayoutProps";
 
 import "@/styles/globals.css";
-import AuthProvider from "@/components/providers/AuthProvider";
 
 const interSans = Inter({
   variable: "--font-inter-sans",
@@ -32,6 +33,7 @@ const RootLayout: FC<Readonly<RootLayoutProps>> = ({ children }) => {
         <AuthProvider>
           <Providers>{children}</Providers>
         </AuthProvider>
+        <Modals />
         <Toaster theme="light" richColors />
       </body>
     </html>

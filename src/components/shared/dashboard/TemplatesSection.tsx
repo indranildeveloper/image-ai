@@ -2,13 +2,14 @@
 
 import { FC } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2Icon, TriangleAlertIcon } from "lucide-react";
 import {
   TTemplatesResponseType,
   useGetTemplates,
 } from "@/features/projects/api/useGetTemplates";
-import { Loader2Icon, TriangleAlertIcon } from "lucide-react";
 import TemplateCard from "./TemplateCard";
 import { useCreateProject } from "@/features/projects/api/useCreateProject";
+import { usePaywall } from "@/features/subscriptions/hooks/usePaywall";
 
 const TemplatesSection: FC = () => {
   const router = useRouter();
@@ -17,11 +18,16 @@ const TemplatesSection: FC = () => {
     page: "1",
     limit: "4",
   });
+  const paywall = usePaywall();
 
   const handleCreateProjectWithTemplate = (
     template: TTemplatesResponseType["data"][0],
   ) => {
-    // TODO: Check if template is premium
+    if (template.isPremium && paywall.shouldBlock) {
+      paywall.triggerPaywall();
+      return;
+    }
+
     mutation.mutate(
       {
         name: `${template.name} Project`,

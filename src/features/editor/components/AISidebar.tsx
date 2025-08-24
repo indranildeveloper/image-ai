@@ -8,6 +8,7 @@ import ToolSidebarClose from "./ToolSidebarClose";
 import { AISidebarProps } from "@/interfaces/AISidebarProps";
 import { Label } from "@/components/ui/label";
 import { useGenerateImage } from "@/features/ai/api/useGenerateImage";
+import { usePaywall } from "@/features/subscriptions/hooks/usePaywall";
 
 const AISidebar: FC<AISidebarProps> = ({
   editor,
@@ -16,6 +17,7 @@ const AISidebar: FC<AISidebarProps> = ({
 }) => {
   const [value, setValue] = useState<string>("");
   const mutation = useGenerateImage();
+  const paywall = usePaywall();
 
   const handleCloseToolSidebar = () => {
     onChangeActiveTool("select");
@@ -24,7 +26,10 @@ const AISidebar: FC<AISidebarProps> = ({
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // TODO: block with paywall
+    if (paywall.shouldBlock) {
+      paywall.triggerPaywall();
+      return;
+    }
 
     mutation.mutate(
       { prompt: value },
