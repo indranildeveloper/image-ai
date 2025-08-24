@@ -741,8 +741,6 @@ export const useEditor = ({
 
       const currentState = JSON.stringify(initialCanvas.toObject(JSON_KEYS));
 
-      console.log(currentState);
-
       canvasHistory.current = [currentState];
       setHistoryIndex(0);
     },

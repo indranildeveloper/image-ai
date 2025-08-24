@@ -21,6 +21,7 @@ import AISidebar from "./AISidebar";
 import RemoveBackgroundSidebar from "./RemoveBackgroundSidebar";
 import DrawSidebar from "./DrawSidebar";
 import SettingsSidebar from "./SettingsSidebar";
+import TemplateSidebar from "./TemplateSidebar";
 import { SELECTION_DEPENDENT_TOOLS } from "../constants/editorConstants";
 import { ActiveTool } from "@/types/types";
 import { EditorProps } from "@/interfaces/EditorProps";
@@ -65,7 +66,7 @@ const Editor: FC<EditorProps> = ({ initialData }) => {
 
     return () => {
       canvas.dispose().catch((error) => {
-        console.log("Canvas Error: ", error);
+        console.error("Canvas Error: ", error);
       });
     };
   }, [init]);
@@ -163,6 +164,11 @@ const Editor: FC<EditorProps> = ({ initialData }) => {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <SettingsSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <TemplateSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}

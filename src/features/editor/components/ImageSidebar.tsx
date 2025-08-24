@@ -6,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import ToolSidebarHeader from "./ToolSidebarHeader";
 import ToolSidebarClose from "./ToolSidebarClose";
 import { UploadButton } from "@/utils/uploadthing";
-import { AlertTriangleIcon, LoaderIcon } from "lucide-react";
+import { AlertTriangleIcon, Loader2Icon } from "lucide-react";
 import { useGetImages } from "@/features/images/api/useGetImages";
 import { ImageSidebarProps } from "@/interfaces/ImageSidebarProps";
 
@@ -51,7 +51,7 @@ const ImageSidebar: FC<ImageSidebarProps> = ({
 
       {isLoading && (
         <div className="mt-10 flex flex-1 items-center justify-center">
-          <LoaderIcon className="text-muted-foreground size-4 animate-spin" />
+          <Loader2Icon className="text-muted-foreground size-4 animate-spin" />
         </div>
       )}
 

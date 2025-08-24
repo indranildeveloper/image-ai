@@ -17,8 +17,6 @@ const app = new Hono()
     async (ctx) => {
       const { page, limit } = ctx.req.valid("query");
 
-      console.log(page, limit);
-
       const data = await db
         .select()
         .from(projects)
