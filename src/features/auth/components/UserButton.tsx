@@ -10,10 +10,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { CreditCardIcon, Loader2Icon, LogOutIcon } from "lucide-react";
+import {
+  CreditCardIcon,
+  CrownIcon,
+  Loader2Icon,
+  LogOutIcon,
+} from "lucide-react";
+import { usePaywall } from "@/features/subscriptions/hooks/usePaywall";
 
 const UserButton: FC = () => {
   const session = useSession();
+  const paywall = usePaywall();
 
   if (session.status === "loading") {
     return (
@@ -32,8 +39,14 @@ const UserButton: FC = () => {
 
   return (
     <DropdownMenu modal={false}>
-      <DropdownMenuTrigger>
-        {/* TODO: Add crown if user is premium */}
+      <DropdownMenuTrigger className="relative outline-none">
+        {!paywall.shouldBlock && !paywall.isLoading && (
+          <div className="absolute -top-1 -left-1 z-10 flex items-center justify-center">
+            <div className="flex items-center justify-center rounded-full bg-white p-1 drop-shadow-sm">
+              <CrownIcon className="size-3 fill-yellow-500 text-yellow-500" />
+            </div>
+          </div>
+        )}
         <Avatar className="size-10 transition hover:opacity-75">
           <AvatarImage src={imageUrl ?? ""} alt={name} />
           <AvatarFallback className="bg-primary flex items-center justify-center font-medium text-white">

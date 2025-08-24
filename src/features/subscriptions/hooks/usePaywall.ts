@@ -1,14 +1,15 @@
 import { useSubscriptionModal } from "../store/useSubscriptionModal";
+import { useGetSubscription } from "../api/useGetSubscription";
 
 export const usePaywall = () => {
   const subscriptionModal = useSubscriptionModal();
+  const { data: subscription, isLoading: isLoadingSubscription } =
+    useGetSubscription();
 
-  // TODO: fetch from API
-  const shouldBlock = true;
+  const shouldBlock = !subscription?.isActive;
 
   return {
-    // TODO: fetch from react query
-    isLoading: false,
+    isLoading: isLoadingSubscription,
     shouldBlock,
     triggerPaywall: () => {
       subscriptionModal.onModalOpen();
