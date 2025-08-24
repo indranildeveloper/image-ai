@@ -13,11 +13,22 @@ import { Separator } from "@/components/ui/separator";
 import DashboardSidebarItem from "./DashboardSidebarItem";
 import { usePaywall } from "@/features/subscriptions/hooks/usePaywall";
 import { useCheckout } from "@/features/subscriptions/api/useCheckout";
+import { useBilling } from "@/features/subscriptions/api/useBilling";
 
 const DashboardSidebarRoutes: FC = () => {
   const pathname = usePathname();
-  const mutation = useCheckout();
+  const checkoutMutation = useCheckout();
+  const billingMutation = useBilling();
   const paywall = usePaywall();
+
+  const handleOpenBilling = () => {
+    if (paywall.shouldBlock) {
+      paywall.triggerPaywall();
+      return;
+    }
+
+    billingMutation.mutate();
+  };
 
   return (
     <div className="flex flex-1 flex-col gap-y-4">
@@ -28,8 +39,8 @@ const DashboardSidebarRoutes: FC = () => {
               variant="outline"
               size="lg"
               className="w-full cursor-pointer border-none transition hover:bg-white hover:opacity-75"
-              disabled={mutation.isPending}
-              onClick={() => mutation.mutate()}
+              disabled={checkoutMutation.isPending}
+              onClick={() => checkoutMutation.mutate()}
             >
               <CrownIcon className="size-4 fill-yellow-500 text-yellow-500" />
               Upgrade to Image AI Pro
@@ -56,7 +67,7 @@ const DashboardSidebarRoutes: FC = () => {
           href={pathname}
           icon={CreditCardIcon}
           label="Billing"
-          onClick={() => {}}
+          onClick={handleOpenBilling}
         />
         <DashboardSidebarItem
           href="mailto:indranilhalder.dev@gmail.com"

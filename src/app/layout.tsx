@@ -5,6 +5,7 @@ import Providers from "@/components/providers/Providers";
 import { Toaster } from "@/components/ui/sonner";
 import AuthProvider from "@/components/providers/AuthProvider";
 import Modals from "@/components/shared/Modals";
+import SubscriptionAlert from "@/features/subscriptions/components/SubscriptionAlert";
 import { RootLayoutProps } from "@/interfaces/RootLayoutProps";
 
 import "@/styles/globals.css";
@@ -34,6 +35,7 @@ const RootLayout: FC<Readonly<RootLayoutProps>> = ({ children }) => {
           <Providers>
             {children}
             <Modals />
+            <SubscriptionAlert />
           </Providers>
         </AuthProvider>
         <Toaster theme="light" richColors />

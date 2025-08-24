@@ -67,6 +67,38 @@ const app = new Hono()
 
     return ctx.json({ data: url });
   })
+  .post("/billing", verifyAuth(), async (ctx) => {
+    const auth = ctx.get("authUser");
+
+    if (!auth.token?.id) {
+      return ctx.json(
+        {
+          error: "Unauthorized!",
+        },
+        401,
+      );
+    }
+
+    const [subscription] = await db
+      .select()
+      .from(subscriptions)
+      .where(eq(subscriptions.userId, auth.token.id));
+
+    if (!subscription) {
+      return ctx.json({ error: "Subscription not found!" }, 404);
+    }
+
+    const session = await stripe.billingPortal.sessions.create({
+      customer: subscription.customerId,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
+    });
+
+    if (!session.url) {
+      return ctx.json({ error: "Failed to create a billing session!" }, 400);
+    }
+
+    return ctx.json({ data: session.url });
+  })
   .post("/webhook", async (ctx) => {
     const body = await ctx.req.text();
     const signature = ctx.req.header("Stripe-Signature") as string;

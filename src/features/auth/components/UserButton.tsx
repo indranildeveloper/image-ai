@@ -17,10 +17,21 @@ import {
   LogOutIcon,
 } from "lucide-react";
 import { usePaywall } from "@/features/subscriptions/hooks/usePaywall";
+import { useBilling } from "@/features/subscriptions/api/useBilling";
 
 const UserButton: FC = () => {
   const session = useSession();
   const paywall = usePaywall();
+  const mutation = useBilling();
+
+  const handleOpenBilling = () => {
+    if (paywall.shouldBlock) {
+      paywall.triggerPaywall();
+      return;
+    }
+
+    mutation.mutate();
+  };
 
   if (session.status === "loading") {
     return (
@@ -55,7 +66,11 @@ const UserButton: FC = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-60">
-        <DropdownMenuItem disabled={false} onClick={() => {}} className="h-10">
+        <DropdownMenuItem
+          disabled={mutation.isPending}
+          onClick={handleOpenBilling}
+          className="h-10"
+        >
           <CreditCardIcon className="size-4" />
           Billing
         </DropdownMenuItem>
