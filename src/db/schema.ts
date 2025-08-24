@@ -101,7 +101,7 @@ export const authenticators = pgTable(
 export const projects = pgTable("project", {
   id: text("id")
     .primaryKey()
-    .$default(() => crypto.randomUUID()),
+    .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
   userId: text("userId")
     .notNull()
@@ -124,3 +124,19 @@ export const projectRelations = relations(projects, ({ one }) => ({
 }));
 
 export const projectsInsertSchema = createInsertSchema(projects);
+
+export const subscriptions = pgTable("subscription", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  subscriptionsId: text("subscriptionsId").notNull(),
+  customerId: text("customerId").notNull(),
+  priceId: text("priceId").notNull(),
+  status: text("status").notNull(),
+  currentPeriodEnd: timestamp("currentPeriodEnd", { mode: "date" }).notNull(),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
+  updatedAt: timestamp("updatedAt", { mode: "date" }).notNull(),
+});
